@@ -4,9 +4,14 @@ import java.time.Duration;
 import java.time.Period;
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
+
 import com.capgemini.go.exception.ExceptionConstants;
 
 public class GoUtility {
+	
+	private static Logger logger = Logger.getRootLogger();
+	
 	/**
 	 * - Function Name : calculatePeriod
 	 * - Description : Calculates and returns a Period object containing the period in (years, months, days) <br>
@@ -19,7 +24,7 @@ public class GoUtility {
 	 */
 	public static Period calculatePeriod (Calendar timestamp1, Calendar timestamp2) throws RuntimeException {
 		if (timestamp1.getTime().after(timestamp2.getTime())) {
-			GoLog.getLogger(GoUtility.class).error("calculatePeriod - " + ExceptionConstants.INAPPROPRIATE_ARGUMENT_PASSED);
+			logger.error("calculatePeriod - " + ExceptionConstants.INAPPROPRIATE_ARGUMENT_PASSED);
 			throw new RuntimeException ("calculatePeriod - " + ExceptionConstants.INAPPROPRIATE_ARGUMENT_PASSED);
 		}
 		else {
@@ -28,7 +33,7 @@ public class GoUtility {
 			int remainingDays = (int) (days % 365);
 			int monthsElapsed = remainingDays / 30;
 			int daysElapsed = remainingDays % 30;
-			GoLog.getLogger(GoUtility.class).info("calculatePeriod - {Years: " + yearsElapsed + " Months: " + monthsElapsed + " Days: " + daysElapsed + "}");
+			logger.info("calculatePeriod - {Years: " + yearsElapsed + " Months: " + monthsElapsed + " Days: " + daysElapsed + "}");
 			return Period.of (yearsElapsed, monthsElapsed, daysElapsed);
 		}
 	}

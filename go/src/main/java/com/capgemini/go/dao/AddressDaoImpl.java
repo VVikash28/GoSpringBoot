@@ -1,11 +1,6 @@
 package com.capgemini.go.dao;
 
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,15 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.capgemini.go.dto.AddressDTO;
-import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.exception.AddressException;
 import com.capgemini.go.exception.ExceptionConstants;
-import com.capgemini.go.exception.ProductException;
-import com.capgemini.go.utility.GoLog;
 import com.capgemini.go.utility.InfoConstants;
 
 @Repository(value = "addressDao")
 public class AddressDaoImpl implements AddressDao {
+	
+	private Logger logger = Logger.getRootLogger();
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	// this will create one sessionFactory for this class
@@ -64,12 +59,12 @@ public class AddressDaoImpl implements AddressDao {
 			addressDto.setCountry(address.getCountry());
 			addressDto.setZip(address.getZip());
 			session.save(address);
-			GoLog.getLogger(AddressDaoImpl.class).info(InfoConstants.Address_Added_Success);
+			logger.info(InfoConstants.Address_Added_Success);
 			transaction.commit();
 			addAddressStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(AddressDaoImpl.class).error(ExceptionConstants.ADDRESS_ADD_ERROR);
+			logger.error(ExceptionConstants.ADDRESS_ADD_ERROR);
 			throw new AddressException(ExceptionConstants.ADDRESS_ADD_ERROR + exp.getMessage());
 		} finally {
 

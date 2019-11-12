@@ -6,6 +6,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -17,12 +18,13 @@ import com.capgemini.go.dto.ProductIdentityDTO;
 import com.capgemini.go.dto.ProductUINMapDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.ProductException;
-import com.capgemini.go.utility.GoLog;
 import com.capgemini.go.utility.InfoConstants;
 
 @Repository(value = "productDao")
 public class ProductDaoImpl implements ProductDao {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	// this class is wired with the sessionFactory to do some operation in the
 	// database
 
@@ -56,7 +58,6 @@ public class ProductDaoImpl implements ProductDao {
 		List<ProductDTO> allProducts = null;
 		Session session = null;
 		CriteriaBuilder criteriaBuilder = null;
-		Transaction transaction = null;
 		try {
 			session = getSessionFactory().openSession();
 			criteriaBuilder = session.getCriteriaBuilder();
@@ -97,25 +98,25 @@ public class ProductDaoImpl implements ProductDao {
 			transaction.begin();
 			existingProd = session.find(ProductDTO.class, product.getProductId());
 			if (existingProd != null) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_EXISTS);
+				logger.error(ExceptionConstants.PRODUCT_EXISTS);
 				throw new ProductException(ExceptionConstants.PRODUCT_EXISTS);
 			}
 			session.save(product);
-			GoLog.getLogger(ProductDaoImpl.class).info(InfoConstants.Product_Added_Success);
+			logger.info(InfoConstants.Product_Added_Success);
 			for (int index = 1; index <= product.getQuantity(); index++) {
 				ProductIdentityDTO prodIdentity = new ProductIdentityDTO();
 				prodIdentity.setProductId(product.getProductId());
 				prodIdentity.setProductUIN(product.getProductId() + Integer.toString(index));
 				ProductUINMapDTO prodUin = new ProductUINMapDTO(prodIdentity, true);
 				session.save(prodUin);
-				GoLog.getLogger(ProductDaoImpl.class)
+				logger
 						.info(InfoConstants.Product_Item_Added_Success + Integer.toString(index));
 			}
 			transaction.commit();
 			addProductStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_ADD_ERROR);
+			logger.error(ExceptionConstants.PRODUCT_ADD_ERROR);
 			throw new ProductException(ExceptionConstants.PRODUCT_ADD_ERROR + exp.getMessage());
 		} finally {
 
@@ -144,7 +145,7 @@ public class ProductDaoImpl implements ProductDao {
 			transaction.begin();
 			existingProd = session.find(ProductDTO.class, product.getProductId());
 			if (existingProd == null) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_NOT_EXISTS);
+				logger.error(ExceptionConstants.PRODUCT_NOT_EXISTS);
 				throw new ProductException(ExceptionConstants.PRODUCT_NOT_EXISTS);
 			}
 			existingProd.setColour(product.getColour());
@@ -158,21 +159,21 @@ public class ProductDaoImpl implements ProductDao {
 			int finalQuantity = initialQuantity + product.getQuantity();
 			existingProd.setQuantity(finalQuantity);
 
-			GoLog.getLogger(ProductDaoImpl.class).info(InfoConstants.Product_Update_Success);
+			logger.info(InfoConstants.Product_Update_Success);
 			for (int index = 1; index <= product.getQuantity(); index++) {
 				ProductIdentityDTO prodIdentity = new ProductIdentityDTO();
 				prodIdentity.setProductId(product.getProductId());
 				prodIdentity.setProductUIN(product.getProductId() + Integer.toString(index + initialQuantity));
 				ProductUINMapDTO prodUin = new ProductUINMapDTO(prodIdentity, true);
 				session.save(prodUin);
-				GoLog.getLogger(ProductDaoImpl.class)
+				logger
 						.info(InfoConstants.Product_Item_Added_Success + Integer.toString(index + initialQuantity));
 			}
 			transaction.commit();
 			editProductStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_UPDATE_ERROR);
+			logger.error(ExceptionConstants.PRODUCT_UPDATE_ERROR);
 			throw new ProductException(ExceptionConstants.PRODUCT_UPDATE_ERROR + exp.getMessage());
 		} finally {
 
@@ -201,28 +202,28 @@ public class ProductDaoImpl implements ProductDao {
 			transaction.begin();
 			existingProd = session.find(ProductDTO.class, productId);
 			if (existingProd == null) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_NOT_EXISTS);
+				logger.error(ExceptionConstants.PRODUCT_NOT_EXISTS);
 				throw new ProductException(ExceptionConstants.PRODUCT_NOT_EXISTS);
 			}
 			
 			int quantity = existingProd.getQuantity();
 			existingProd.setQuantity(-1);
 
-			GoLog.getLogger(ProductDaoImpl.class).info(InfoConstants.Product_Delete_Success);
+			logger.info(InfoConstants.Product_Delete_Success);
 			for (int index = 1; index <= quantity; index++) {
 				ProductIdentityDTO prodIdentity = new ProductIdentityDTO();
 				prodIdentity.setProductId(productId);
 				prodIdentity.setProductUIN(productId + Integer.toString(index));
 				ProductUINMapDTO prodItem = session.find(ProductUINMapDTO.class, prodIdentity);
 				prodItem.setProductIsPresent(false);
-				GoLog.getLogger(ProductDaoImpl.class)
+				logger
 						.info(InfoConstants.Product_Item_Delete_Success + Integer.toString(index));
 			}
 			transaction.commit();
 			deleteProductStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PRODUCT_DELETE_ERROR);
+			logger.error(ExceptionConstants.PRODUCT_DELETE_ERROR);
 			throw new ProductException(ExceptionConstants.PRODUCT_DELETE_ERROR + exp.getMessage());
 		} finally {
 

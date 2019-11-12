@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.log4j.Logger;
 
 import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.service.ProductService;
-import com.capgemini.go.utility.GoLog;
 import com.capgemini.go.utility.InfoConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +29,8 @@ import com.google.gson.JsonObject;
 @RequestMapping("/Products")
 public class ProductController {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	@Autowired
 	private ProductService productService;
 
@@ -120,10 +122,10 @@ public class ProductController {
 			result = productService.deleteProduct(productId);
 			if (result == true) {
 				((ObjectNode) dataResponse).put("Success :", InfoConstants.Product_Delete_Success);
-				GoLog.getLogger(ProductController.class).info(InfoConstants.Product_Delete_Success);
+				logger.info(InfoConstants.Product_Delete_Success);
 			} else {
 				((ObjectNode) dataResponse).put("Error :", ExceptionConstants.PRODUCT_DELETE_ERROR);
-				GoLog.getLogger(ProductController.class).error(ExceptionConstants.PRODUCT_DELETE_ERROR);
+				logger.error(ExceptionConstants.PRODUCT_DELETE_ERROR);
 			}
 		} catch (Exception exp) {
 			((ObjectNode) dataResponse).put("Error :", exp.getMessage());
@@ -161,10 +163,10 @@ public class ProductController {
 			result = productService.editProduct(newProd);
 			if (result == true) {
 				((ObjectNode) dataResponse).put("Success :", InfoConstants.Product_Update_Success);
-				GoLog.getLogger(ProductController.class).info(InfoConstants.Product_Update_Success);
+				logger.info(InfoConstants.Product_Update_Success);
 			} else {
 				((ObjectNode) dataResponse).put("Error :", ExceptionConstants.PRODUCT_UPDATE_ERROR);
-				GoLog.getLogger(ProductController.class).error(ExceptionConstants.PRODUCT_UPDATE_ERROR);
+				logger.error(ExceptionConstants.PRODUCT_UPDATE_ERROR);
 			}
 		} catch (Exception exp) {
 			((ObjectNode) dataResponse).put("Error :", exp.getMessage());

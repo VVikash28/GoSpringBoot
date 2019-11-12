@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.exception.RetailerInventoryException;
 import com.capgemini.go.exception.UserException;
-import com.capgemini.go.utility.GoLog;
 import com.capgemini.go.utility.GoUtility;
 
 @Service (value = "retailerInventoryService")
 public class RetailerInventoryServiceImpl implements RetailerInventoryService {
+	
+	private Logger logger = Logger.getRootLogger();
+	
 	@Autowired
 	private RetailerInventoryDao retailerInventoryDao;
 	
@@ -122,10 +125,10 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 			}
 			
 		} catch (UserException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).error(error.getMessage());
+			logger.error(error.getMessage());
 			throw new RetailerInventoryException ("getYearlyShelfTimeReport - " + ExceptionConstants.FAILED_TO_RETRIEVE_USERNAME);
 		} catch (RuntimeException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).error(error.getMessage());
+			logger.error(error.getMessage());
 			throw new RetailerInventoryException ("getYearlyShelfTimeReport - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
 		}
 		return result;
@@ -141,7 +144,7 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getItemWiseDeliveryTimeReport (String retailerId)
 			throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getItemWiseDeliveryTimeReport - " + "Request for item wise delivery time report received");
+		logger.info("getItemWiseDeliveryTimeReport - " + "Request for item wise delivery time report received");
 		List<RetailerInventoryBean> result = new ArrayList<RetailerInventoryBean> ();
 		
 		RetailerInventoryDTO queryArguments = new RetailerInventoryDTO (retailerId, (byte)0, null, null, null, null, null);
@@ -168,13 +171,13 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 			}
 			
 		} catch (UserException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).error("getItemWiseDeliveryTimeReport - " + error.getMessage());
+			logger.error("getItemWiseDeliveryTimeReport - " + error.getMessage());
 			throw new RetailerInventoryException ("getItemWiseDeliveryTimeReport - " + ExceptionConstants.FAILED_TO_RETRIEVE_USERNAME);
 		} catch (RuntimeException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).error("getItemWiseDeliveryTimeReport - " + error.getMessage());
+			logger.error("getItemWiseDeliveryTimeReport - " + error.getMessage());
 			throw new RetailerInventoryException ("getItemWiseDeliveryTimeReport - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
 		}
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getItemWiseDeliveryTimeReport - " + "Sent requested data");
+		logger.info("getItemWiseDeliveryTimeReport - " + "Sent requested data");
 		return result;
 	}
 
@@ -213,7 +216,7 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getListOfRetailers() throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getListOfRetailers - function called");
+		logger.info("getListOfRetailers - function called");
 		List<RetailerInventoryBean> result = new ArrayList<RetailerInventoryBean> ();
 		
 		List<RetailerInventoryDTO> tempListOfDeliveredItems = this.retailerInventoryDao.getListOfRetailers();
@@ -222,13 +225,13 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 			listOfDeliveredItems.add(new RetailerInventoryDTO (String.valueOf(tempListOfDeliveredItems.get(index)), 
 					(byte)0, null, null, null, null, null));
 		}
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getListOfRetailers - List extracted");
+		logger.info("getListOfRetailers - List extracted");
 		
 		List<UserDTO> userList = null;
 		try {
 			userList = this.userDao.getUserIdList();
 		} catch (UserException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getListOfRetailers - " + error.getMessage());
+			logger.info("getListOfRetailers - " + error.getMessage());
 			throw new RetailerInventoryException ("getListOfRetailers - " + error.getMessage());
 		}
 		
@@ -245,7 +248,7 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 			object.setRetailerName(retailerName);
 			result.add(object);
 		}
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getListOfRetailers - function return");
+		logger.info("getListOfRetailers - function return");
 		return result;
 	}
 
@@ -258,12 +261,12 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public boolean addItemToInventory(String retailerId, byte productCategory, String productId, String productUIN) throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("addItemToInventory - function called");
+		logger.info("addItemToInventory - function called");
 		boolean itemAdded = false;
 		Calendar currentSystemTimestamp = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		RetailerInventoryDTO queryArgument = new RetailerInventoryDTO(retailerId, productCategory, productId, productUIN, currentSystemTimestamp, null, null);
 		itemAdded = this.retailerInventoryDao.insertItemInRetailerInventory(queryArgument);
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("addItemToInventory - function return");
+		logger.info("addItemToInventory - function return");
 		return itemAdded;
 	}
 
@@ -276,10 +279,10 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public boolean deleteItemFromInventory(String retailerId, String productUIN) throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("deleteItemFromInventory - function called");
+		logger.info("deleteItemFromInventory - function called");
 		RetailerInventoryDTO queryArgument = new RetailerInventoryDTO(retailerId, (byte)0, null, productUIN, null, null, null);
 		boolean itemDeleted = this.retailerInventoryDao.deleteItemInRetailerInventory(queryArgument);
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("deleteItemFromInventory - function return");
+		logger.info("deleteItemFromInventory - function return");
 		return itemDeleted;
 	}
 
@@ -291,11 +294,11 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public boolean updateItemReceiveTimestamp(String retailerId, String productUIN) throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("updateItemReceiveTimestamp - function called");
+		logger.info("updateItemReceiveTimestamp - function called");
 		Calendar currentSystemTimestamp = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		RetailerInventoryDTO queryArgument = new RetailerInventoryDTO(retailerId, (byte)0, null, productUIN, null, currentSystemTimestamp, null);
 		boolean itemUpdated = this.retailerInventoryDao.updateProductReceiveTimeStamp(queryArgument);
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("updateItemReceiveTimestamp - function return");
+		logger.info("updateItemReceiveTimestamp - function return");
 		return itemUpdated;
 	}
 
@@ -307,11 +310,11 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public boolean updateItemSaleTimestamp(String retailerId, String productUIN) throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("updateItemSaleTimestamp - function called");
+		logger.info("updateItemSaleTimestamp - function called");
 		Calendar currentSystemTimestamp = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		RetailerInventoryDTO queryArgument = new RetailerInventoryDTO(retailerId, (byte)0, null, productUIN, null, null, currentSystemTimestamp);
 		boolean itemUpdated = this.retailerInventoryDao.updateProductSaleTimeStamp(queryArgument);
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("updateItemSaleTimestamp - function return");
+		logger.info("updateItemSaleTimestamp - function return");
 		return itemUpdated;
 	}
 
@@ -323,7 +326,7 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 * @throws RetailerInventoryException
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getInventoryById(String retailerId) throws RetailerInventoryException {
-		GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getInventoryById - function called with argument (" + retailerId + ")");
+		logger.info("getInventoryById - function called with argument (" + retailerId + ")");
 		RetailerInventoryDTO queryArgument = new RetailerInventoryDTO(retailerId, (byte)0, null, null, null, null, null);
 		List<RetailerInventoryDTO> itemList = this.retailerInventoryDao.getItemListByRetailer(queryArgument);
 		List<RetailerInventoryBean> result = new ArrayList<RetailerInventoryBean> ();
@@ -351,7 +354,7 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 				result.add(itemBean);
 			}
 		} catch (UserException | ProductException error) {
-			GoLog.getLogger(RetailerInventoryServiceImpl.class).info("getInventoryById - " + error.getMessage());
+			logger.info("getInventoryById - " + error.getMessage());
 			throw new RetailerInventoryException ("getInventoryById - " + error.getMessage());
 		} 
 		return result;

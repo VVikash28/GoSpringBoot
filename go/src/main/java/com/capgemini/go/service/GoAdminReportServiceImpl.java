@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,12 @@ import com.capgemini.go.dao.GoAdminReportsDao;
 import com.capgemini.go.dao.GoAdminReportsDaoImpl;
 import com.capgemini.go.dao.ProductDao;
 import com.capgemini.go.exception.GoAdminException;
-import com.capgemini.go.utility.GoLog;
 
 @Service(value = "goAdminReportService")
 public class GoAdminReportServiceImpl implements GoAdminReportsService {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	@Autowired
 	private GoAdminReportsDao goAdminReportsDao;
 
@@ -45,7 +47,7 @@ public class GoAdminReportServiceImpl implements GoAdminReportsService {
 		try {
 			result = goAdminReportsDao.viewSalesReportByUserAndCategory(entry, exit, TargetuserId, category);
 		} catch (GoAdminException e) {
-			GoLog.getLogger(GoAdminReportServiceImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return result;
 
@@ -66,7 +68,7 @@ public class GoAdminReportServiceImpl implements GoAdminReportsService {
 		try {
 			result = goAdminReportsDao.viewDetailedSalesReportByProduct(entry, exit, cat);
 		} catch (GoAdminException e) {
-			GoLog.getLogger(GoAdminReportServiceImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return result;
 

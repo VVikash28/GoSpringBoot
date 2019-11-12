@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -22,11 +23,13 @@ import com.capgemini.go.dto.OrderProductMapDTO;
 import com.capgemini.go.dto.OrderReturnDTO;
 import com.capgemini.go.dto.SalesRepDTO;
 import com.capgemini.go.exception.SalesRepresentativeException;
-import com.capgemini.go.utility.GoLog;
+
 
 @Repository(value = "salesRepresentativeDao")
 public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	// this class is wired with the sessionFactory to do some operation in the
 	// database
 
@@ -76,7 +79,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			session.getTransaction().commit();
 			returnOrderStatus = true;
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 			session.close();
 			throw new SalesRepresentativeException("order_product_map_failure");
@@ -110,7 +113,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 
 			session.getTransaction().commit();
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 
 			throw new SalesRepresentativeException("order_product_map_failure");
@@ -147,7 +150,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			}
 			System.out.println(orderProductMap.size());
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 
 			throw new SalesRepresentativeException("order_product_map_failure");
@@ -178,7 +181,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			order = (List<Integer>) query.list();
 
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 			throw new SalesRepresentativeException("order_product_map_failure");
 		} finally {
@@ -219,7 +222,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			session.getTransaction().commit();
 
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 			throw new SalesRepresentativeException("order_product_map_failure");
 		} finally {
@@ -256,7 +259,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			session.getTransaction().commit();
 
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
 			throw new SalesRepresentativeException("order_product_map_failure");
 		} finally {
@@ -311,7 +314,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			}
 
 		} catch (HibernateException exp) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			session2.getTransaction().rollback();
 			throw new SalesRepresentativeException("order_product_map_failure");
 		} finally {
@@ -347,7 +350,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				return orderID;
 			}
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("orderId_not_found_failure"));
 		} finally {
 			try {
@@ -384,14 +387,14 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				return checkSalesRepIdFlag;
 			}
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			e.printStackTrace();
 			// GoLog.logger.error(exceptionProps.getProperty("userId_not_found_failure"));
 		} finally {
 			try {
 				session.close();
 			} catch (Exception e) {
-				GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new SalesRepresentativeException(e.getMessage());
 				// throw new ConnectException(Constants.connectionError);
 			}
@@ -430,7 +433,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			try {
 				session.close();
 			} catch (Exception e) {
-				GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new SalesRepresentativeException(e.getMessage());
 				// throw new ConnectException(Constants.connectionError);
 			}
@@ -475,7 +478,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				index++;
 			}
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 
 			// GoLog.logger.error(exceptionProps.getProperty("orderId_not_found_failure"));
 		} finally {
@@ -532,7 +535,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			System.out.println("The Order-Product-Map table's " + rowsChanged + " rows has been updated");
 			cancelOrderStatus = "The product with the uin " + orderCancel.getProductuin() + " has been cancelled";
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty(" return_order_failure"));
 		} finally {
 			try {
@@ -569,7 +572,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			List<Long> prodQtyList = (List<Long>) query.list();
 			productQuantity = Integer.parseInt(prodQtyList.get(0).toString());
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new SalesRepresentativeException(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("product_quantity_failure"));
 		} finally {
@@ -628,7 +631,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			try {
 				session.close();
 			} catch (Exception e) {
-				GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+				logger.error(e.getMessage());
 				// throw new SalesRepresentativeException(e.getMessage());
 				// throw new ConnectException(Constants.connectionError);
 			}
@@ -718,7 +721,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			}
 			statusCancelOrderForProduct = "The given quantity of product has been cancelled";
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new SalesRepresentativeException(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("cancel_order_failure"));
 		} finally {
@@ -769,7 +772,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			}
 			targetStatus = "Your target sales is " + String.valueOf(targetSales) + " and target status is " + status;
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("sales representative not
 			// found"));
 			throw new Exception("Sales representative data not found");
@@ -807,7 +810,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			bonus = Double.parseDouble(bonusList.get(0).toString());
 			bonusForSales = "Your bonus is " + String.valueOf(bonus);
 		} catch (Exception e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("sales representative not
 			// found"));
 			throw new Exception("Sales representative data not found");

@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.go.dao.SalesRepresentativeDao;
-import com.capgemini.go.dao.SalesRepresentativeDaoImpl;
 import com.capgemini.go.dto.OrderCancelDTO;
 import com.capgemini.go.dto.OrderDTO;
 import com.capgemini.go.dto.OrderProductMapDTO;
@@ -17,10 +17,11 @@ import com.capgemini.go.dto.OrderReturnDTO;
 import com.capgemini.go.exception.OrderNotFoundException;
 import com.capgemini.go.exception.ProductNotFoundException;
 import com.capgemini.go.exception.SalesRepresentativeException;
-import com.capgemini.go.utility.GoLog;
 
 @Service(value = "salesRepresentativeService")
 public class SalesRepresentativeServiceImpl implements SalesRepresentativeService {
+	
+	private Logger logger = Logger.getRootLogger();
 
 	@Autowired
 	private SalesRepresentativeDao salesRepresentativeDao;
@@ -63,7 +64,7 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 				throw new SalesRepresentativeException("not_yet_dispatched");
 			}
 		} catch (SalesRepresentativeException | IOException e) {
-			GoLog.getLogger(SalesRepresentativeDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new SalesRepresentativeException("failure_order");
 
 		}

@@ -6,24 +6,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.go.dto.OrderDTO;
-import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.dto.ViewDetailedSalesReportByProductDTO;
 import com.capgemini.go.dto.ViewSalesReportByUserDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.GoAdminException;
-import com.capgemini.go.utility.GoLog;
-import com.capgemini.go.utility.HibernateUtil;
 
 @Repository(value = "goAdminReportsDao")
 public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	// this will create one sessionFactory for this class
@@ -61,7 +60,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 			ViewSalesReportByUserDTO temp1;
 
 			if (entry == null || exit == null) {
-				GoLog.getLogger(GoAdminReportsDaoImpl.class).error(ExceptionConstants.INVALID_DATE);
+				logger.error(ExceptionConstants.INVALID_DATE);
 				throw new GoAdminException(ExceptionConstants.INVALID_DATE);
 			}
 
@@ -116,11 +115,11 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 		} catch (HibernateException e) {
 
-			GoLog.getLogger(GoAdminReportsDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 			session.getTransaction().rollback();
 
 		} catch (Exception exp) {
-			GoLog.getLogger(GoAdminReportsDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			exp.printStackTrace();
 
 		}
@@ -172,7 +171,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 		try {
 
 			if (entry == null || exit == null) {
-				GoLog.getLogger(GoAdminReportsDaoImpl.class).error(ExceptionConstants.INVALID_DATE);
+				logger.error(ExceptionConstants.INVALID_DATE);
 				throw new GoAdminException(ExceptionConstants.INVALID_DATE);
 
 			}
@@ -185,7 +184,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 			Double price;
 
 			if (results.size() == 0) {
-				GoLog.getLogger(GoAdminReportsDaoImpl.class).error(ExceptionConstants.EMPTY_DATABASE);
+				logger.error(ExceptionConstants.EMPTY_DATABASE);
 				throw new GoAdminException(ExceptionConstants.EMPTY_DATABASE);
 
 			}
@@ -360,12 +359,12 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 				}
 			}
 		} catch (HibernateException e) {
-			GoLog.getLogger(GoAdminReportsDaoImpl.class).error(e.getMessage());
+			logger.error(e.getMessage());
 
 			session.getTransaction().rollback();
 
 		} catch (Exception exp) {
-			GoLog.getLogger(GoAdminReportsDaoImpl.class).error(exp.getMessage());
+			logger.error(exp.getMessage());
 			exp.printStackTrace();
 
 		}

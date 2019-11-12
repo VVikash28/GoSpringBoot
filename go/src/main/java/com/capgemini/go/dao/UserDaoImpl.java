@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,12 +20,13 @@ import com.capgemini.go.dto.UserDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.UserException;
 import com.capgemini.go.utility.Authentication;
-import com.capgemini.go.utility.GoLog;
 import com.capgemini.go.utility.InfoConstants;
 
 @Repository(value = "userDao")
 public class UserDaoImpl implements UserDao {
 
+	private Logger logger = Logger.getRootLogger();
+	
 	// this class is wired with the sessionFactory to do some operation in the
 	// database
 
@@ -67,7 +69,7 @@ public class UserDaoImpl implements UserDao {
 			transaction.begin();
 			existingUser = session.find(UserDTO.class, user.getUserId());
 			if (existingUser != null) {
-				GoLog.getLogger(UserDaoImpl.class).error(ExceptionConstants.USER_EXISTS);
+				logger.error(ExceptionConstants.USER_EXISTS);
 				throw new UserException(ExceptionConstants.USER_EXISTS);
 			}
 
@@ -79,7 +81,7 @@ public class UserDaoImpl implements UserDao {
 			criteriaQuery.where(criteriaBuilder.equal(existuser.get("userMail"), user.getUserMail()));
 			u = session.createQuery(criteriaQuery).getResultList();
 			if (u.size() != 0) {
-				GoLog.getLogger(UserDaoImpl.class).error(ExceptionConstants.USER_MAIL_EXISTS);
+				logger.error(ExceptionConstants.USER_MAIL_EXISTS);
 				throw new UserException(ExceptionConstants.USER_MAIL_EXISTS);
 			}
 			
@@ -90,17 +92,17 @@ public class UserDaoImpl implements UserDao {
 			criteriaQuery.where(criteriaBuilder.equal(existuser.get("userNumber"), user.getUserNumber()));
 			u = session.createQuery(criteriaQuery).getResultList();
 			if (u.size() != 0) {
-				GoLog.getLogger(UserDaoImpl.class).error(ExceptionConstants.USER_NUMBER_EXISTS);
+				logger.error(ExceptionConstants.USER_NUMBER_EXISTS);
 				throw new UserException(ExceptionConstants.USER_NUMBER_EXISTS);
 			}
 
 			session.save(user);
-			GoLog.getLogger(ProductDaoImpl.class).info(InfoConstants.User_Added_Success);
+			logger.info(InfoConstants.User_Added_Success);
 			transaction.commit();
 			userRegistrationStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(UserDaoImpl.class).error(ExceptionConstants.USER_REG_ERROR);
+			logger.error(ExceptionConstants.USER_REG_ERROR);
 			throw new UserException(ExceptionConstants.USER_REG_ERROR + exp.getMessage());
 		} finally {
 
@@ -144,29 +146,29 @@ public class UserDaoImpl implements UserDao {
 			transaction.begin();
 			existingUser = session.find(UserDTO.class, user.getUserId());
 			if (existingUser == null) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.USER_NOT_EXISTS);
+				logger.error(ExceptionConstants.USER_NOT_EXISTS);
 				throw new UserException(ExceptionConstants.USER_NOT_EXISTS);
 			}
 			if (existingUser.isUserActiveStatus() == true) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.ALREADY_LOGGEDIN);
+				logger.error(ExceptionConstants.ALREADY_LOGGEDIN);
 				throw new UserException(ExceptionConstants.ALREADY_LOGGEDIN);
 			}
 
 			if (Authentication.encrypt(user.getUserPassword(), InfoConstants.secretKey)
 					.equals(existingUser.getUserPassword())) {
 				existingUser.setUserActiveStatus(true);
-				GoLog.getLogger(ProductDaoImpl.class).info(InfoConstants.User_Login_Success);
+				logger.info(InfoConstants.User_Login_Success);
 				transaction.commit();
 				userLoginStatus = true;
 			}
 
 			else {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.PASSWORD_MISMATCH);
+				logger.error(ExceptionConstants.PASSWORD_MISMATCH);
 				throw new UserException(ExceptionConstants.PASSWORD_MISMATCH);
 			}
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.USER_LOGIN_ERROR);
+			logger.error(ExceptionConstants.USER_LOGIN_ERROR);
 			throw new UserException(ExceptionConstants.USER_LOGIN_ERROR + exp.getMessage());
 		} finally {
 
@@ -197,7 +199,7 @@ public class UserDaoImpl implements UserDao {
 			transaction.begin();
 			existingUser = session.find(UserDTO.class, userId);
 			if (existingUser == null) {
-				GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.USER_NOT_EXISTS);
+				logger.error(ExceptionConstants.USER_NOT_EXISTS);
 				throw new UserException(ExceptionConstants.USER_NOT_EXISTS);
 			}
 			existingUser.setUserActiveStatus(false);
@@ -205,7 +207,7 @@ public class UserDaoImpl implements UserDao {
 			userLogoutStatus = true;
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(ProductDaoImpl.class).error(ExceptionConstants.USER_LOGOUT_ERROR);
+			logger.error(ExceptionConstants.USER_LOGOUT_ERROR);
 			throw new UserException(ExceptionConstants.USER_LOGOUT_ERROR + exp.getMessage());
 		} finally {
 
@@ -233,7 +235,7 @@ public class UserDaoImpl implements UserDao {
 			transaction.begin();
 			existingUser = session.find(UserDTO.class, userId);
 			if (existingUser == null) {
-				GoLog.getLogger(UserDaoImpl.class).error(ExceptionConstants.USER_NOT_EXISTS);
+				logger.error(ExceptionConstants.USER_NOT_EXISTS);
 				throw new UserException(ExceptionConstants.USER_NOT_EXISTS);
 			}
 			transaction.commit();
@@ -267,7 +269,7 @@ public class UserDaoImpl implements UserDao {
 			transaction.commit();
 		} catch (Exception exp) {
 			transaction.rollback();
-			GoLog.getLogger(UserDaoImpl.class).error("getUserIdList - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
+			logger.error("getUserIdList - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
 			throw new UserException ("getUserIdList - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
 		} finally {
 			session.close();
