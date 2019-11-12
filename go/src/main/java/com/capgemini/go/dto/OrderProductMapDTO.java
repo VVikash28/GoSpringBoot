@@ -2,7 +2,11 @@ package com.capgemini.go.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity(name = "OrderProductMapDTO")
 @Table(name = "ORDER_PRODUCT_MAP", uniqueConstraints = { @UniqueConstraint(columnNames = "product_uin") })

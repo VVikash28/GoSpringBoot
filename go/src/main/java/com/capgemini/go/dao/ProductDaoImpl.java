@@ -74,6 +74,7 @@ public class ProductDaoImpl implements ProductDao {
 		} finally {
 			session.close();
 		}
+		logger.info(InfoConstants.Product_Loader);
 		return allProducts;
 	}
 
@@ -109,8 +110,7 @@ public class ProductDaoImpl implements ProductDao {
 				prodIdentity.setProductUIN(product.getProductId() + Integer.toString(index));
 				ProductUINMapDTO prodUin = new ProductUINMapDTO(prodIdentity, true);
 				session.save(prodUin);
-				logger
-						.info(InfoConstants.Product_Item_Added_Success + Integer.toString(index));
+				logger.info(InfoConstants.Product_Item_Added_Success + Integer.toString(index));
 			}
 			transaction.commit();
 			addProductStatus = true;

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
 
 @Embeddable
 public class WhishlistIdDTO  implements Serializable{

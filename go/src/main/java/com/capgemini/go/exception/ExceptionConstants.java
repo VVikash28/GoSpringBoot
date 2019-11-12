@@ -33,6 +33,9 @@ public class ExceptionConstants {
 	public static final String PASSWORD_MISMATCH = " Username or Password is incorrect";
 	public static final String ALREADY_LOGGEDIN = " User Already Logged in ! Please log out first";
 	public static final String USER_LOGOUT_ERROR = " User logged out succesfully";
+	public static final String ITEM_ALREADY_PRESENT_IN_CART = "Item already present in the cart";
+	public static final String ITEM_NOT_IN_CART="Item is not present in the cart";
+	public static final String  ITEM_ALREADY_MAPPED_TO_ORDER="Item is already mapped to order";
 	// END OF USER EXCEPTION CONSTANTS
 
 	// REPORT CONSTANT

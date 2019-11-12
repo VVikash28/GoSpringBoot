@@ -1,5 +1,4 @@
 package com.capgemini.go.dto;
-import java.sql.Date;
 
 public class ViewSalesReportByUserDTO {
 	private String userId;

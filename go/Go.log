@@ -1,2 +1,17 @@
 2019-11-12-http-nio-9090-exec-2-INFO -root      :getRetailerInventoryById - Request for aman Inventory Received
 2019-11-12-http-nio-9090-exec-2-ERROR-root      :getRetailerInventoryById - getItemListByRetailer - The requested data was not found
+[2019-11-12-http-nio-9090-exec-1-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-5-INFO -root      :User Successfully logged in
+][2019-11-12-http-nio-9090-exec-6-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-8-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-9-INFO -root      :User Successfully logged in
+][2019-11-12-http-nio-9090-exec-10-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-4-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-7-ERROR-root      :org.hibernate.exception.ConstraintViolationException: could not execute statement
+][2019-11-12-http-nio-9090-exec-9-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-10-INFO -root      :All products loaded from database
+][2019-11-12-http-nio-9090-exec-2-ERROR-root      :org.hibernate.exception.ConstraintViolationException: could not execute statement
+][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
+]
