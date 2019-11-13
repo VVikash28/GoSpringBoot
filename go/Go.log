@@ -14,4 +14,22 @@
 ][2019-11-12-http-nio-9090-exec-10-INFO -root      :All products loaded from database
 ][2019-11-12-http-nio-9090-exec-2-ERROR-root      :org.hibernate.exception.ConstraintViolationException: could not execute statement
 ][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
+][2019-11-12-main-ERROR-root      : Product with the given product id already exists
+][2019-11-12-main-ERROR-root      : Error in adding a new Product >>>
+][2019-11-12-main-INFO -root      :Product Added Successfully
+][2019-11-12-main-INFO -root      :Successful addition of Product Item1
+][2019-11-12-main-ERROR-root      : Product with the given product id already exists
+][2019-11-12-main-ERROR-root      : Error in adding a new Product >>>
+][2019-11-13-main-INFO -root      :Product Added Successfully
+][2019-11-13-main-INFO -root      :Successful addition of Product Item1
+][2019-11-13-main-INFO -root      :Product Added Successfully
+][2019-11-13-main-INFO -root      :Successful addition of Product Item1
+][2019-11-13-main-ERROR-root      : Product with the given product id already exists
+][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
+][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
+][2019-11-13-main-INFO -root      :Product Added Successfully
+][2019-11-13-main-INFO -root      :Successful addition of Product Item1
+][2019-11-13-main-ERROR-root      : Product with the given product id already exists
+][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
+][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
 ]
