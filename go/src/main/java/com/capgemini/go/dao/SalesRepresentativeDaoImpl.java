@@ -373,6 +373,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 	public boolean checkSalesRepId(String userId) throws Exception {
 		boolean checkSalesRepIdFlag = false;
 		Session session = null;
+		String userID = null;
 		try {
 			// exceptionProps = PropertiesLoader.loadProperties(EXCEPTION_PROPERTIES_FILE);
 			// goProps = PropertiesLoader.loadProperties(GO_PROPERTIES_FILE);
@@ -381,7 +382,9 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			Query query = session.createQuery(HQLQuerryMapper.IS_SALES_REP_ID_PRESENT);
 			query.setParameter("userID", userId);
 			List<SalesRepDTO> userList = (List<SalesRepDTO>) query.list();
-			String userID = userList.get(0).getUserId();
+			if (userList.size()!=0) {
+				userID = userList.get(0).getUserId().toString();
+			}
 			if (userID != null) {
 				checkSalesRepIdFlag = true;
 				return checkSalesRepIdFlag;
@@ -413,7 +416,7 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 	public boolean checkDispatchStatusForCancelling(String orderId) throws Exception {
 		Session session = null;
 		boolean checkDispatchStatusFlag = false;
-		int index = 0;
+		byte index = 0;
 		try {
 			// exceptionProps = PropertiesLoader.loadProperties(EXCEPTION_PROPERTIES_FILE);
 			// goProps = PropertiesLoader.loadProperties(GO_PROPERTIES_FILE);
@@ -421,8 +424,8 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			session.beginTransaction();
 			Query query = session.createQuery(HQLQuerryMapper.CHECK_ORDER_DISPATCH_STATUS);
 			query.setParameter("orderID", orderId);
-			List<Integer> orderDipatchStatusList = (List<Integer>) query.list();
-			index = Integer.parseInt(orderDipatchStatusList.get(0).toString());
+			List<Byte> orderDipatchStatusList = (List<Byte>) query.list();
+			index = Byte.parseByte(orderDipatchStatusList.get(0).toString());
 			if (index == 1) {
 				checkDispatchStatusFlag = true;
 			}
@@ -508,7 +511,6 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 		int value = 0;
 		int i = 0;
 		try {
-
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
 			OrderCancelDTO oce = new OrderCancelDTO();
@@ -654,14 +656,12 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 		String statusCancelOrderForProduct = null;
 		Session session = null;
 		Session session2 = null;
-		int rowsChanged = 0;
 		int index = 0;
 		try {
 			// exceptionProps = PropertiesLoader.loadProperties(EXCEPTION_PROPERTIES_FILE);
 			// goProps = PropertiesLoader.loadProperties(GO_PROPERTIES_FILE);
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
-			System.out.println("inside updateOrderCancelForProduct method ");
 			if (productQtyOrdered == quantity) {
 				Query query = session.createQuery(HQLQuerryMapper.GET_ORDER_PRODUCT_MAP_CANCEL_PROD_EQUAL_QUANTITY);
 				query.setParameter("orderID", orderId);
@@ -689,17 +689,14 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				System.out.println(
 						"The order-cancel table's " + orderProductMapEntityList.size() + " rows has been inserted");
 			} else if (productQtyOrdered > quantity) {
-				System.out.println("inside updateOrderCancelForProduct method 2");
 				Query query = session.createQuery(HQLQuerryMapper.GET_ORDER_PRODUCT_MAP_CANCEL_PROD_LESS_QUANTITY);
 				query.setParameter("orderID", orderId);
 				query.setParameter("productID", productId);
 				query.setFirstResult(0);
 				query.setMaxResults(quantity);
-				System.out.println("the quantity to cancel " + quantity);
 				List<OrderProductMapDTO> orderProductMapEntityList = (List<OrderProductMapDTO>) query.list();
 				session2 = getSessionFactory().openSession();
 				session2.beginTransaction();
-				System.out.println("size of opm list " + orderProductMapEntityList.size());
 				while (orderProductMapEntityList.size() > index) {
 					OrderCancelDTO oce = new OrderCancelDTO();
 					oce.setOrderid(orderProductMapEntityList.get(index).getOrderId());
@@ -720,9 +717,9 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 						"The order-cancel table's " + orderProductMapEntityList.size() + " rows has been inserted");
 			}
 			statusCancelOrderForProduct = "The given quantity of product has been cancelled";
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			throw new SalesRepresentativeException(e.getMessage());
+		} catch (Exception exp) {
+			logger.error(exp.getMessage());
+			throw new SalesRepresentativeException(exp.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("cancel_order_failure"));
 		} finally {
 			try {
@@ -771,8 +768,8 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				status = "not met";
 			}
 			targetStatus = "Your target sales is " + String.valueOf(targetSales) + " and target status is " + status;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
+		} catch (Exception exp) {
+			logger.error(exp.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("sales representative not
 			// found"));
 			throw new Exception("Sales representative data not found");
@@ -809,8 +806,8 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			List<Double> bonusList = (List<Double>) query.list();
 			bonus = Double.parseDouble(bonusList.get(0).toString());
 			bonusForSales = "Your bonus is " + String.valueOf(bonus);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
+		} catch (Exception exp) {
+			logger.error(exp.getMessage());
 			// GoLog.logger.error(exceptionProps.getProperty("sales representative not
 			// found"));
 			throw new Exception("Sales representative data not found");

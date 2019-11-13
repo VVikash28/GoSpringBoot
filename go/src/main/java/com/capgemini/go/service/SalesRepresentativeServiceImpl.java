@@ -164,13 +164,14 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 		@SuppressWarnings("unused")
 		List<OrderDTO> listOrder = null;
 		String statusProductCancel = null;
+		System.out.println("Cancelling of Product is being processed");
 		if (salesRepresentativeDao.checkSalesRepId(userId) == false) {
-			throw new SalesRepresentativeException("Sales Representaive id is invalid");
+			throw new SalesRepresentativeException("Sales Representative id is invalid");
 		} else if (salesRepresentativeDao.getOrderDetails(orderId) == null) {
 			throw new OrderNotFoundException("No such order id exists");
 		} else if ((salesRepresentativeDao.checkDispatchStatusForCancelling(orderId)) == true) {
 			throw new OrderNotFoundException(
-					"Selected Product(s) cant be cancelled as it is dispatched! Return the Product");
+					"Selected Product cant be cancelled as it is dispatched! Return the Product");
 		} else if (salesRepresentativeDao.getOrderProductMapForCancelling(orderId).isEmpty() == true) {
 			throw new OrderNotFoundException("Products are not mapped with order");
 		} else {
