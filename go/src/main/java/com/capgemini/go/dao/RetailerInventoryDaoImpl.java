@@ -143,34 +143,19 @@ public class RetailerInventoryDaoImpl implements RetailerInventoryDao {
 		 * un-required productDispatchTime, productShelfTimeOut, productCategory,
 		 * retailerUserId
 		 */
-		RetailerInventoryDTO newItem = new RetailerInventoryDTO();
-		newItem.setProductUniqueId(queryArguments.getProductUniqueId());
-		newItem.setProductReceiveTimestamp(queryArguments.getProductReceiveTimestamp());
-
 		Transaction transaction = null;
 		Session session = getSessionFactory().openSession();
 		try {
-			transaction = session.beginTransaction();
-			List<RetailerInventoryDTO> itemList = session
-					.createQuery("from RetailerInventoryDTO", RetailerInventoryDTO.class).list();
-			boolean productNotFound = true;
-			for (RetailerInventoryDTO item : itemList) {
-				if (item.getProductUniqueId().equals(newItem.getProductUniqueId())) {
-					newItem.setRetailerId(item.getRetailerId());
-					newItem.setProductCategory(item.getProductCategory());
-					newItem.setProductDispatchTimestamp(item.getProductDispatchTimestamp());
-					productNotFound = false;
-					break;
-				}
-			}
-			if (productNotFound) {
+			transaction = session.getTransaction();
+			transaction.begin();
+			RetailerInventoryDTO existingItem = session
+					.find(RetailerInventoryDTO.class, queryArguments.getProductUniqueId());
+			if (existingItem == null) {
 				logger.debug(ExceptionConstants.PRODUCT_NOT_IN_INVENTORY);
 				throw new RetailerInventoryException(
 						"updateProductReceiveTimeStamp - " + ExceptionConstants.PRODUCT_NOT_IN_INVENTORY);
-			} else {
-				session.merge(newItem);
-				logger.info("updateProductReceiveTimeStamp - " + "Data updated in database");
 			}
+			existingItem.setProductReceiveTimestamp(queryArguments.getProductReceiveTimestamp());
 			transaction.commit();
 		} catch (IllegalStateException error) {
 			logger.error(error.getMessage());
@@ -204,35 +189,19 @@ public class RetailerInventoryDaoImpl implements RetailerInventoryDao {
 		 * un-required productDispatchTime, productReceiveTime, productCategory,
 		 * retailerUserId
 		 */
-		RetailerInventoryDTO newItem = new RetailerInventoryDTO();
-		newItem.setProductUniqueId(queryArguments.getProductUniqueId());
-		newItem.setProductSaleTimestamp(queryArguments.getProductSaleTimestamp());
-
 		Transaction transaction = null;
 		Session session = getSessionFactory().openSession();
 		try {
-			transaction = session.beginTransaction();
-			List<RetailerInventoryDTO> itemList = session
-					.createQuery("from RetailerInventoryDTO", RetailerInventoryDTO.class).list();
-			boolean productNotFound = true;
-			for (RetailerInventoryDTO item : itemList) {
-				if (item.getProductUniqueId().equals(newItem.getProductUniqueId())) {
-					newItem.setRetailerId(item.getRetailerId());
-					newItem.setProductCategory(item.getProductCategory());
-					newItem.setProductDispatchTimestamp(item.getProductDispatchTimestamp());
-					newItem.setProductReceiveTimestamp(item.getProductReceiveTimestamp());
-					productNotFound = false;
-					break;
-				}
-			}
-			if (productNotFound) {
-				logger.error("updateProductSaleTimeStamp - " + ExceptionConstants.PRODUCT_NOT_IN_INVENTORY);
+			transaction = session.getTransaction();
+			transaction.begin();
+			RetailerInventoryDTO existingItem = session
+					.find(RetailerInventoryDTO.class, queryArguments.getProductUniqueId());
+			if (existingItem == null) {
+				logger.debug(ExceptionConstants.PRODUCT_NOT_IN_INVENTORY);
 				throw new RetailerInventoryException(
 						"updateProductSaleTimeStamp - " + ExceptionConstants.PRODUCT_NOT_IN_INVENTORY);
-			} else {
-				session.merge(newItem);
-				logger.info("updateProductSaleTimeStamp - " + "Data updated in database");
 			}
+			existingItem.setProductSaleTimestamp(queryArguments.getProductSaleTimestamp());
 			transaction.commit();
 		} catch (IllegalStateException error) {
 			logger.error("updateProductSaleTimeStamp - " + error.getMessage());

@@ -191,11 +191,46 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getCategoryWiseDeliveryTimeReport(String retailerId)
 			throws RetailerInventoryException {
-		return null;
+		logger.info("getCategoryWiseDeliveryTimeReport - " + "Request for Category Wise delivery time report received");
+		List<RetailerInventoryBean> result = new ArrayList<RetailerInventoryBean> ();
+		
+		RetailerInventoryDTO queryArguments = new RetailerInventoryDTO (retailerId, (byte)0, null, null, null, null, null);
+		List<RetailerInventoryDTO> listOfDeliveredItems = this.retailerInventoryDao.getDeliveredItemsDetails(queryArguments);
+				
+		try {
+			List<UserDTO> userList = this.userDao.getUserIdList();
+			
+			for (RetailerInventoryDTO deliveredItem : listOfDeliveredItems) {
+				RetailerInventoryBean object = new RetailerInventoryBean ();
+				object.setRetailerId(retailerId);
+				for (UserDTO user : userList) {
+					if (user.getUserId().equals(retailerId)) {
+						object.setRetailerName(user.getUserName());
+						break;
+					}
+				}
+				object.setProductCategoryNumber(deliveredItem.getProductCategory());
+				object.setProductCategoryName(GoUtility.getCategoryName(deliveredItem.getProductCategory()));
+				object.setProductUniqueId(deliveredItem.getProductUniqueId());
+				object.setDeliveryTimePeriod(GoUtility.calculatePeriod(deliveredItem.getProductDispatchTimestamp(), deliveredItem.getProductReceiveTimestamp()));
+				object.setShelfTimePeriod(null);
+				result.add(object);
+			}
+			
+		} catch (UserException error) {
+			logger.error("getCategoryWiseDeliveryTimeReport - " + error.getMessage());
+			throw new RetailerInventoryException ("getCategoryWiseDeliveryTimeReport - " + ExceptionConstants.FAILED_TO_RETRIEVE_USERNAME);
+		} catch (RuntimeException error) {
+			logger.error("getCategoryWiseDeliveryTimeReport - " + error.getMessage());
+			throw new RetailerInventoryException ("getCategoryWiseDeliveryTimeReport - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
+		}
+		logger.info("getCategoryWiseDeliveryTimeReport - " + "Sent requested data");
+		return result;
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : getOutlierCategoryItemWiseDeliveryTimeReport <br>
+	 * - Function Name : get
+	 * OutlierCategoryItemWiseDeliveryTimeReport <br>
 	 * - Description : to get Outlier Category Item wise Delivery Time Report <br>
 	 * 
 	 * @param String retailerId
