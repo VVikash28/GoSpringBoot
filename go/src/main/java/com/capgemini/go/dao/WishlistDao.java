@@ -20,18 +20,30 @@ public interface WishlistDao {
 
 	/*******************************************************************************************************
 	 *- Function Name : addProductToWishlist 
-	 *- Input Parameters : Product List
+	 *- Input Parameters : Product ID
 	 *- Return Type : boolean
-	 *- Throws : RetailerException
-	 *- Author : CAPGEMINI 
+	 *- Throws : WishlistException
+	 *- Author : Shalu Panwar 
 	 *- Creation Date : 21/9/2019
 	 *- Description : To add products to Wishlist database
 	 *@throws ConnectException 
 	 * @throws IOException 
 	 * @throws HibernateException 
-	 *@throws SQLException 
 	 ********************************************************************************************************/
 	boolean addProductToWishlist(WishlistDTO wishlist) throws WishlistException;
 
+	/*******************************************************************************************************
+	 *- Function Name : viewWishlist 
+	 *- Input Parameters : Product List
+	 *- Return Type : boolean
+	 *- Throws : WishlistException
+	 *- Author : Shalu Panwar 
+	 *- Creation Date : 21/9/2019
+	 *- Description : To view products in Wishlist database
+	 *@throws ConnectException 
+	 * @throws IOException 
+	 * @throws HibernateException 
+	 ********************************************************************************************************/
+	public List<ProductDTO> viewWishlist(String userId) throws WishlistException;
 	
-	}
+}

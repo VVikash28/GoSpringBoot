@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class AddressDTO {
 	// attributes
 	@Id
-	@Column(name = "ADDRESS_ID", unique = true, nullable = false)
+	@Column(name = "ADDRESS_ID", nullable = false)
 	private String addressId;
 
 	@Column(name = "USER_ID", unique = false, nullable = false)

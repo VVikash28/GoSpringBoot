@@ -17,6 +17,7 @@ public class InfoConstants {
 	public static final String secretKey = "GreatOutdoor";
 	public static final String User_Login_Success = "User Successfully logged in";
 	public static final String User_Logout_Success = "User Successfully logged out";
+	public static final String Reports_Generated_Successfully = "Report Generated...";
 	// End of User Info
 
 	// Address Info

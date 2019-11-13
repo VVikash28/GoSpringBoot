@@ -9,7 +9,6 @@ import org.hibernate.HibernateException;
 
 import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.dto.WishlistDTO;
-import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.exception.WishlistException;
 
 public interface WishlistService {
@@ -22,7 +21,7 @@ public interface WishlistService {
  *- Input Parameters : Product List
  *- Return Type : boolean
  *- Throws : RetailerException
- *- Author : CAPGEMINI 
+ *- Author : Shalu Panwar 
  *- Creation Date : 21/9/2019
  *- Description : To add products to Wishlist database
  *@throws ConnectException 
@@ -32,6 +31,5 @@ public interface WishlistService {
  ********************************************************************************************************/
 boolean addProductToWishlist(WishlistDTO wishlist) throws WishlistException;
 
-
-
+List<ProductDTO> viewWishlist(String userId) throws WishlistException;
 }

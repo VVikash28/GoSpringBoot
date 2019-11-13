@@ -22,7 +22,7 @@ import com.capgemini.go.exception.SalesRepresentativeException;
 
 @Service(value = "salesRepresentativeService")
 public class SalesRepresentativeServiceImpl implements SalesRepresentativeService {
-	
+
 	private Logger logger = Logger.getRootLogger();
 
 	@Autowired
@@ -60,7 +60,7 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 				}
 				if (statusOrderReturn) {
 					orderProductMapStatus = salesRepresentativeDao.updateOrderProductMap(orderId);
-					orderProductMapStatus=true;
+					orderProductMapStatus = true;
 				}
 			}
 			if(!orderProductMapStatus) {
@@ -100,10 +100,13 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 
 	// ------------------------ 1. GO Application --------------------------
 	/*******************************************************************************************************
-	 * - Function Name : cancelOrder() - Input Parameters : String orderId, String
-	 * userId - Return Type : - Throws :SalesRepresentativeException - Author :
-	 * CAPGEMINI - Creation Date : 23/09/2019 - Description : Cancel Order to
-	 * database calls dao method getOrderDetails(orderId)
+	 * - Function Name : cancelOrder() 
+	 * - Input Parameters : String orderId, String userId 
+	 * - Return Type : String
+	 * - Throws : SalesRepresentativeException, OrderNotFoundException
+	 * - Author : ANSHU KUMAR 
+	 * - Creation Date : 23/09/2019 
+	 * - Description : Cancel Order to database calls dao method getOrderDetails(orderId)
 	 ********************************************************************************************************/
 
 	public String cancelOrder(String orderId, String userId) throws Exception {
@@ -116,13 +119,25 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 		String statusOrderCancel = null;
 		System.out.println("Cancelling of order is being processed");
 		if (salesRepresentativeDao.checkSalesRepId(userId) == false) {
+
+			logger.error("Sales Representative id is invalid");
 			throw new SalesRepresentativeException("Sales Representative id is invalid");
+
 		} else if (salesRepresentativeDao.getOrderDetails(orderId) == null) {
+
+			logger.error("No such order id exists");
 			throw new OrderNotFoundException("No such order id exists");
+
 		} else if ((salesRepresentativeDao.checkDispatchStatusForCancelling(orderId)) == true) {
+
+			logger.error("Order cant be cancelled as it is dispatched! Return the order");
 			throw new OrderNotFoundException("Order cant be cancelled as it is dispatched! Return the order");
+
 		} else if (salesRepresentativeDao.getOrderProductMapForCancelling(orderId).isEmpty() == true) {
+
+			logger.error("Products are not mapped with order");
 			throw new OrderNotFoundException("Products are not mapped with order");
+
 		} else {
 			list = salesRepresentativeDao.getOrderProductMapForCancelling(orderId);
 			Iterator<OrderProductMapDTO> itr = list.iterator();
@@ -138,6 +153,8 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 			}
 			System.out.println("The order-cancel table's " + index + " rows has been inserted");
 			statusOrderCancel = "Order has been cancelled";
+			logger.info(statusOrderCancel);
+			logger.info("The order-cancel table's " + index + " rows has been inserted");
 		}
 		return statusOrderCancel;
 
@@ -145,11 +162,13 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 
 	// ------------------------ 1. GO Application --------------------------
 	/*******************************************************************************************************
-	 * - Function Name : cancelProduct - Input Parameters : String orderId, String
-	 * userId, String productID, int qty - Return Type : String - Throws :
-	 * SalesRepresentativeException - Author : CAPGEMINI - Creation Date :
-	 * 23/09/2019 - Description : Cancel Order to database calls dao method
-	 * getOrderDetails(orderId)
+	 * - Function Name : cancelProduct 
+	 * - Input Parameters : String orderId, String userId, String productID, int qty 
+	 * - Return Type : String 
+	 * - Throws : SalesRepresentativeException, OrderNotFoundException, ProductNotFoundException 
+	 * - Author : ANSHU KUMAR
+	 * - Creation Date : 23/09/2019 
+	 * - Description : Cancel Order to database calls dao method getOrderDetails(orderId)
 	 ********************************************************************************************************/
 
 	public String cancelProduct(String orderId, String userId, String productId, int quantity) throws Exception {
@@ -161,15 +180,27 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 		@SuppressWarnings("unused")
 		List<OrderDTO> listOrder = null;
 		String statusProductCancel = null;
+		System.out.println("Cancelling of Product is being processed");
 		if (salesRepresentativeDao.checkSalesRepId(userId) == false) {
-			throw new SalesRepresentativeException("Sales Representaive id is invalid");
+
+			logger.error("Sales Representative id is invalid");
+			throw new SalesRepresentativeException("Sales Representative id is invalid");
+
 		} else if (salesRepresentativeDao.getOrderDetails(orderId) == null) {
+
+			logger.error("No such order id exists");
 			throw new OrderNotFoundException("No such order id exists");
+
 		} else if ((salesRepresentativeDao.checkDispatchStatusForCancelling(orderId)) == true) {
+
+			logger.error("Selected Product cant be cancelled as it is dispatched! Return the Product");
 			throw new OrderNotFoundException(
-					"Selected Product(s) cant be cancelled as it is dispatched! Return the Product");
+					"Selected Product cant be cancelled as it is dispatched! Return the Product");
+
 		} else if (salesRepresentativeDao.getOrderProductMapForCancelling(orderId).isEmpty() == true) {
+			logger.error("Products are not mapped with order");
 			throw new OrderNotFoundException("Products are not mapped with order");
+
 		} else {
 			list = salesRepresentativeDao.getOrderProductMapForCancelling(orderId);
 			@SuppressWarnings("unused")
@@ -178,12 +209,14 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 			String statusOrderCancelForProduct = null;
 			int productQtyOrdered = salesRepresentativeDao.getProductQuantityOrdered(orderId, productId);
 			if (productQtyOrdered == 0) {
-				throw new ProductNotFoundException("There are no such products in the order");
+				System.out.println("Invalid product id");
 			}
 			if (productQtyOrdered == 0) {
-				System.out.println("Invalid product id");
+				logger.error("There are no such products in the order");
+				throw new ProductNotFoundException("There are no such products in the order");
 			} else {
 				if (productQtyOrdered < quantity) {
+					logger.error("Quantity of product cancelled cant be greater than the quantity of product ordered");
 					throw new ProductNotFoundException(
 							"Quantity of product cancelled cant be greater than the quantity of product ordered");
 				} else if (productQtyOrdered == quantity) {
@@ -199,6 +232,8 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 					statusOrderCancelForProduct = salesRepresentativeDao.updateOrderCancelForProduct(orderId, productId,
 							productQtyOrdered, quantity, userId);
 					statusProductCancel = "The given products are canceled";
+					logger.info(statusProductCancel);
+					logger.info(statusOrderCancelForProduct);
 				}
 			}
 			return statusProductCancel;
@@ -207,10 +242,13 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 
 	// ------------------------ 1. GO Application --------------------------
 	/*******************************************************************************************************
-	 * - Function Name : checkTargetSales - Input Parameters : String userId -
-	 * Return Type : - Throws : SalesRepresentativeException - Author : CAPGEMINI -
-	 * Creation Date : 23/09/2019 - Description : Cancel Order to database calls dao
-	 * method getOrderDetails(sr)
+	 * - Function Name : checkTargetSales 
+	 * - Input Parameters : String userId 
+	 * - Return Type : String
+	 * - Throws : SalesRepresentativeException 
+	 * - Author : ANSHU KUMAR 
+	 * - Creation Date : 23/09/2019 
+	 * - Description : Cancel Order to database calls dao method getOrderDetails(sr)
 	 ********************************************************************************************************/
 
 	public String checkTargetSales(String userId) throws Exception {
@@ -228,10 +266,13 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 
 	// ------------------------ 1. GO Application --------------------------
 	/*******************************************************************************************************
-	 * - Function Name : checkBonus() - Input Parameters : String userId - Return
-	 * Type : String - Throws : Exception - Author : CAPGEMINI - Creation Date :
-	 * 23/09/2019 - Description : Cancel Order to database calls dao method
-	 * getOrderDetails(sr)
+	 * - Function Name : checkBonus() 
+	 * - Input Parameters : String userId 
+	 * - Return Type : String 
+	 * - Throws : SalesRepresentativeException 
+	 * - Author : ANSHU KUMAR 
+	 * - Creation Date : 23/09/2019 
+	 * - Description : Cancel Order to database calls dao method getOrderDetails(sr)
 	 ********************************************************************************************************/
 
 	public String checkBonus(String userId) throws Exception {

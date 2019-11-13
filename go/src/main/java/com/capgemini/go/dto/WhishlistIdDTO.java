@@ -8,19 +8,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class WhishlistIdDTO  implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3429807264653578490L;
-
-	/**
-	 * 
-	 */
 
 
 	@Column(name = "USER_ID",  nullable = false)
 	private String userId;
 	
+	public WhishlistIdDTO() {
+		
+	}
+
 	@Column(name = "PRODUCT_ID", nullable = false)
 	private String productId;
 

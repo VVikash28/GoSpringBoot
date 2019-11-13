@@ -120,7 +120,8 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 		} catch (Exception exp) {
 			logger.error(exp.getMessage());
-			exp.printStackTrace();
+			throw new GoAdminException(ExceptionConstants.ERROR_IN_VIEWING + exp.getMessage()); 
+			
 
 		}
 		return viewSales;
@@ -146,8 +147,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 		ViewDetailedSalesReportByProductDTO temp;
 
 		Statement stmt = null;
-		int startYear = entry.getYear();
-		int endYear = exit.getYear();
+		
 		int j = 0;
 		double prevM = 0.0, prevQ = 0.0, prevY = 0.0;
 
@@ -169,12 +169,15 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 		Session session = null;
 
 		try {
-
+			
 			if (entry == null || exit == null) {
 				logger.error(ExceptionConstants.INVALID_DATE);
 				throw new GoAdminException(ExceptionConstants.INVALID_DATE);
 
 			}
+			int startYear = entry.getYear();
+			int endYear = exit.getYear();
+
 
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
@@ -365,7 +368,8 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 		} catch (Exception exp) {
 			logger.error(exp.getMessage());
-			exp.printStackTrace();
+			throw new GoAdminException(ExceptionConstants.ERROR_IN_VIEWING + exp.getMessage()); 
+			
 
 		}
 
