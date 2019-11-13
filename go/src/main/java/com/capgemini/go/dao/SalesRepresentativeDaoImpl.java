@@ -32,7 +32,6 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 	
 	// this class is wired with the sessionFactory to do some operation in the
 	// database
-
 	@Autowired
 	private SessionFactory sessionFactory;
 	// this will create one sessionFactory for this class
