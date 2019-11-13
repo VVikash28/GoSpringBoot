@@ -34,8 +34,8 @@ public class ExceptionConstants {
 	public static final String ALREADY_LOGGEDIN = " User Already Logged in ! Please log out first";
 	public static final String USER_LOGOUT_ERROR = " User logged out succesfully";
 	public static final String ITEM_ALREADY_PRESENT_IN_CART = "Item already present in the cart";
-	public static final String ITEM_NOT_IN_CART="Item is not present in the cart";
-	public static final String  ITEM_ALREADY_MAPPED_TO_ORDER="Item is already mapped to order";
+	public static final String ITEM_NOT_IN_CART = "Item is not present in the cart";
+	public static final String ITEM_ALREADY_MAPPED_TO_ORDER = "Item is already mapped to order";
 	// END OF USER EXCEPTION CONSTANTS
 
 	// REPORT CONSTANT
@@ -46,10 +46,12 @@ public class ExceptionConstants {
 
 	// WISHLIST EXCEPTION CONSTANTS
 	public static final String PRODUCT_IN_WISHLIST = " Product is already in your wishlist";
+	public static final String WISHLIST_PRODUCT = "Error in displaying your wishlist";
 
 	// END OF WISHLIST EXCEPTION CONSTANTS
 
 	// ADDRESS EXCEPTION CONSTANTS
+	public static final String VIEW_ADDRESS_ERROR = " Error in Viewing Address >>>";
 	public static final String ADDRESS_ADD_ERROR = "Error in adding a new address >>>";
 	public static final String ADDRESSID_NOT_EXISTS = "Address Id doesn't exists";
 	public static final String ADDRESS_UPDATE_ERROR = "Error in updating address >>>";

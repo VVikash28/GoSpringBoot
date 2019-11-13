@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.capgemini.go.dao.WishlistDao;
 import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.dto.WishlistDTO;
+import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.exception.WishlistException;
 
 @Service(value = "wishlistService")
@@ -26,8 +27,8 @@ public class WishlistServiceImpl implements WishlistService {
 
 	// ------------------------ GreatOutdoor Application --------------------------
 	/*******************************************************************************************************
-	 * - Function Name : addProductToWishlist - Input Parameters : Product List -
-	 * Return Type : boolean - Throws : RetailerException - Author : CAPGEMINI -
+	 * - Function Name : addProductToWishlist - Input Parameters : Product ID -
+	 * Return Type : boolean - Throws : RetailerException - Author : Shalu Panwar -
 	 * Creation Date : 21/9/2019 - Description : To add products to Wishlist
 	 * database
 	 ********************************************************************************************************/
@@ -36,6 +37,18 @@ public class WishlistServiceImpl implements WishlistService {
 	public boolean addProductToWishlist(WishlistDTO wishlist) throws WishlistException {
 		return wishlistDao.addProductToWishlist(wishlist);
 
+	}
+	
+	/*******************************************************************************************************
+	 * - Function Name : ViewWishlist - Input Parameters : Product List -
+	 * Return Type : boolean - Throws : RetailerException - Author : Shalu Panwar -
+	 * Creation Date : 21/9/2019 - Description : To View products in Wishlist
+	 * database
+	 ********************************************************************************************************/
+	@Override 
+	public List<ProductDTO> viewWishlist(String userId) throws WishlistException {
+
+		return wishlistDao.viewWishlist(userId);
 	}
 
 }

@@ -20,4 +20,31 @@ public interface AddressDao {
 	 ********************************************************************************************************/
 	boolean addAddress(AddressDTO address) throws AddressException;
 
+	// ------------------------ GreatOutdoor Application --------------------------
+	/*******************************************************************************************************
+	 * - Function Name : updateAddress - Input Parameters : <AddressDTO> address -
+	 * Return Type : boolean - Throws : AddressException - Author : AYUSHI DIXIT -
+	 * Creation Date : 21/9/2019 - Description : to update address in address
+	 * database
+	 ********************************************************************************************************/
+	boolean updateAddress(AddressDTO address) throws AddressException;
+
+	// ------------------------ GreatOutdoor Application --------------------------
+	/*******************************************************************************************************
+	 * - Function Name : deleteAddress - Input Parameters : <AddressDTO> address -
+	 * Return Type : boolean - Throws : AddressException - Author : AYUSHI DIXIT -
+	 * Creation Date : 21/9/2019 - Description : to delete address in address
+	 * database
+	 ********************************************************************************************************/
+	boolean deleteAddress(String addressId) throws AddressException;
+	
+	// ------------------------ GreatOutdoor Application --------------------------
+		/*******************************************************************************************************
+		 * - Function Name : viewAllAddress - Input Parameters : <AddressDTO> address -
+		 * Return Type : boolean - Throws : AddressException - Author : AYUSHI DIXIT -
+		 * Creation Date : 21/9/2019 - Description : to view all address in address
+		 * database
+		 ********************************************************************************************************/
+	List<AddressDTO> viewAllAddress(String userId) throws AddressException;
+
 }
