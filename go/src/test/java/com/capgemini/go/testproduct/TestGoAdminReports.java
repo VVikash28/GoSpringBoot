@@ -1,28 +1,20 @@
 package com.capgemini.go.testproduct;
 
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.ConnectException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.GoAdminException;
-import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.service.GoAdminReportsService;
-
 import com.capgemini.go.utility.InfoConstants;
 
 @RunWith(SpringRunner.class)
