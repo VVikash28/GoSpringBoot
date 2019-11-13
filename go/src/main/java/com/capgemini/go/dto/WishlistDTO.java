@@ -31,4 +31,8 @@ public class WishlistDTO implements Serializable {
 		this.id = id;
 	}
 
+	public WishlistDTO() {
+		
+	}
+
 }
