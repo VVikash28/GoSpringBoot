@@ -414,9 +414,11 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 				itemBean.setProductCategoryNumber(item.getProductCategory());
 				itemBean.setProductCategoryName(GoUtility.getCategoryName(item.getProductCategory()));
 				for (ProductDTO product : productList) {
-					if (item.getProductId() == product.getProductId()) {
+					if (product.getProductId().equals(item.getProductId())) {
 						itemBean.setProductName(product.getProductName());
 						break;
+					} else {
+						continue;
 					}
 				}
 				itemBean.setProductUniqueId(item.getProductUniqueId());
