@@ -45,7 +45,7 @@ public class testReturnProductServiceImplTest {
 	@Test
     @DisplayName("Return Product request failed")
     @Rollback(true)
-	public void testReturnOrderFailure() {
+	public void testReturnProductFailure() {
 		String actualMessage = null;
 		String orderId="OR234";
 		String userId="SR02";
