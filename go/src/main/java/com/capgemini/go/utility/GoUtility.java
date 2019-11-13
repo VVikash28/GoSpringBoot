@@ -48,4 +48,32 @@ public class GoUtility {
 		default : {return "OTHER";}
 		}
 	}
+	
+	/**
+	 * - Function Name : comparePeriod
+	 * - Description : Compare two Period objects @p1, @p2 and returns true if @p1 > @p2 else false <br>
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return boolean - true if @p1 > @p2 else false otherwise
+	 */
+	public static boolean comparePeriod (Period p1, Period p2) {
+		if (p1.getYears() > p2.getYears()) {
+			return true;
+		} else if (p1.getYears() == p2.getYears()) {
+			if (p1.getMonths() > p2.getMonths()) {
+				return true;
+			} else if (p1.getMonths() == p2.getMonths()) {
+				if (p1.getDays() > p2.getDays()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 }
