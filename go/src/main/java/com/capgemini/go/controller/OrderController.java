@@ -51,13 +51,13 @@ public class OrderController {
 			cart = orderAndCartService.addItemToCart(cartItem);
 
 			if (cart) {
-				
+
 				((ObjectNode) dataResponse).put("Success :", "Item Added Successfully");
 			} else {
 				((ObjectNode) dataResponse).put("Error :", "Error in adding item to cart");
 			}
 		} catch (RetailerException e) {
-			
+
 			((ObjectNode) dataResponse).put("Error :", "Item already added to cart");
 		}
 
@@ -68,7 +68,8 @@ public class OrderController {
 	@RequestMapping(value = "/BuyNowServlet", method = RequestMethod.POST)
 	public String placeOrder(@RequestBody Map<String, Object> requestData) {
 		OrderDTO ord = new OrderDTO();
-		ord.setOrderId(String.valueOf(requestData.get("placeOrderCustId")));
+		ord.setUserId(String.valueOf(requestData.get("placeOrderCustId")));
+		System.out.println(requestData.get("placeOrderCustId"));
 		ord.setAddressId(String.valueOf(requestData.get("placeOrderAddrId")));
 		boolean order = true;
 		ObjectMapper mapper = new ObjectMapper();
@@ -83,7 +84,7 @@ public class OrderController {
 				((ObjectNode) dataResponse).put("Success :", "Error in placing the order");
 			}
 		} catch (RetailerException e) {
-			
+
 			e.printStackTrace();
 		}
 

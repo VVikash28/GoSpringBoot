@@ -18,7 +18,7 @@ import com.capgemini.go.dto.OrderProductMapDTO;
 import com.capgemini.go.dto.ProductUINMapDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.RetailerException;
-
+import com.capgemini.go.utility.GenerateID;
 
 @Repository(value = "orderAndCartDao")
 public class OrderAndCartDaoImpl implements OrderAndCartDao {
@@ -165,8 +165,11 @@ public class OrderAndCartDaoImpl implements OrderAndCartDao {
 	public boolean registerOrder(OrderDTO order) throws RetailerException {
 		boolean orderRegistered = false;
 
-		OrderDTO newOrder = new OrderDTO(order.getOrderId(), (byte) 0, null, order.getUserId(), order.getAddressId(),
-				order.getOrderInitiateTime());
+		String orderId = "ORD" + GenerateID.generate();
+		long millis = System.currentTimeMillis();
+		java.sql.Date orderInitiationTime = new java.sql.Date(millis);
+		OrderDTO newOrder = new OrderDTO(orderId, (byte) 0, null, order.getUserId(), order.getAddressId(),
+				orderInitiationTime);
 		Transaction transaction = null;
 		Session session = getSessionFactory().openSession();
 		try {
