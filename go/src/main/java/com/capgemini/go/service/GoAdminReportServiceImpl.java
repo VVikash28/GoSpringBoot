@@ -21,7 +21,7 @@ import com.capgemini.go.exception.GoAdminException;
 public class GoAdminReportServiceImpl implements GoAdminReportsService {
 
 	private Logger logger = Logger.getRootLogger();
-	
+
 	@Autowired
 	private GoAdminReportsDao goAdminReportsDao;
 
@@ -43,13 +43,7 @@ public class GoAdminReportServiceImpl implements GoAdminReportsService {
 
 	public List<ViewSalesReportByUserDTO> viewSalesReportByUserAndCategory(Date entry, Date exit, String TargetuserId,
 			int category) throws GoAdminException, ConnectException {
-		List<ViewSalesReportByUserDTO> result = new ArrayList<ViewSalesReportByUserDTO>();
-		try {
-			result = goAdminReportsDao.viewSalesReportByUserAndCategory(entry, exit, TargetuserId, category);
-		} catch (GoAdminException e) {
-			logger.error(e.getMessage());
-		}
-		return result;
+		return goAdminReportsDao.viewSalesReportByUserAndCategory(entry, exit, TargetuserId, category);
 
 	}
 
@@ -64,13 +58,7 @@ public class GoAdminReportServiceImpl implements GoAdminReportsService {
 	public List<ViewDetailedSalesReportByProductDTO> viewDetailedSalesReportByProduct(Date entry, Date exit, int cat)
 			throws GoAdminException, ConnectException {
 
-		List<ViewDetailedSalesReportByProductDTO> result = new ArrayList<ViewDetailedSalesReportByProductDTO>();
-		try {
-			result = goAdminReportsDao.viewDetailedSalesReportByProduct(entry, exit, cat);
-		} catch (GoAdminException e) {
-			logger.error(e.getMessage());
-		}
-		return result;
+		return goAdminReportsDao.viewDetailedSalesReportByProduct(entry, exit, cat);
 
 	}
 }
