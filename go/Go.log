@@ -1,35 +1,55 @@
-2019-11-12-http-nio-9090-exec-2-INFO -root      :getRetailerInventoryById - Request for aman Inventory Received
-2019-11-12-http-nio-9090-exec-2-ERROR-root      :getRetailerInventoryById - getItemListByRetailer - The requested data was not found
-[2019-11-12-http-nio-9090-exec-1-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-5-INFO -root      :User Successfully logged in
-][2019-11-12-http-nio-9090-exec-6-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-8-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-9-INFO -root      :User Successfully logged in
-][2019-11-12-http-nio-9090-exec-10-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-4-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-7-ERROR-root      :org.hibernate.exception.ConstraintViolationException: could not execute statement
-][2019-11-12-http-nio-9090-exec-9-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-10-INFO -root      :All products loaded from database
-][2019-11-12-http-nio-9090-exec-2-ERROR-root      :org.hibernate.exception.ConstraintViolationException: could not execute statement
-][2019-11-12-http-nio-9090-exec-3-INFO -root      :All products loaded from database
-][2019-11-12-main-ERROR-root      : Product with the given product id already exists
-][2019-11-12-main-ERROR-root      : Error in adding a new Product >>>
-][2019-11-12-main-INFO -root      :Product Added Successfully
-][2019-11-12-main-INFO -root      :Successful addition of Product Item1
-][2019-11-12-main-ERROR-root      : Product with the given product id already exists
-][2019-11-12-main-ERROR-root      : Error in adding a new Product >>>
-][2019-11-13-main-INFO -root      :Product Added Successfully
-][2019-11-13-main-INFO -root      :Successful addition of Product Item1
-][2019-11-13-main-INFO -root      :Product Added Successfully
-][2019-11-13-main-INFO -root      :Successful addition of Product Item1
-][2019-11-13-main-ERROR-root      : Product with the given product id already exists
-][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
-][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
-][2019-11-13-main-INFO -root      :Product Added Successfully
-][2019-11-13-main-INFO -root      :Successful addition of Product Item1
-][2019-11-13-main-ERROR-root      : Product with the given product id already exists
-][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
-][2019-11-13-main-ERROR-root      : Error in adding a new Product >>>
-]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]
+[2019/11/13 - main - INFO  - root    : OrderProductMap updated by qty]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]
+[2019/11/13 - main - INFO  - root    : OrderProductMap updated by qty]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]
+[2019/11/13 - main - INFO  - root    : OrderProductMap updated by qty]
+[2019/11/13 - http-nio-9090-exec-1 - INFO  - root    : All products loaded from database]
+[2019/11/13 - http-nio-9090-exec-3 - INFO  - root    : All products loaded from database]
+[2019/11/13 - http-nio-9090-exec-4 - INFO  - root    : All products loaded from database]
+[2019/11/13 - http-nio-9090-exec-9 - ERROR - root    :  User Already Logged in ! Please log out first]
+[2019/11/13 - http-nio-9090-exec-9 - ERROR - root    :  Error in logging in >>>]
+[2019/11/13 - http-nio-9090-exec-1 - ERROR - root    :  User Already Logged in ! Please log out first]
+[2019/11/13 - http-nio-9090-exec-1 - ERROR - root    :  Error in logging in >>>]
+[2019/11/13 - http-nio-9090-exec-3 - INFO  - root    : User Successfully logged in]
+[2019/11/13 - http-nio-9090-exec-4 - INFO  - root    : All products loaded from database]
+[2019/11/13 - http-nio-9090-exec-7 - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - http-nio-9090-exec-7 - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - http-nio-9090-exec-7 - INFO  - root    : Return Order Accepted]
+[2019/11/13 - http-nio-9090-exec-7 - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - http-nio-9090-exec-8 - INFO  - root    : All products loaded from database]
+[2019/11/13 - http-nio-9090-exec-1 - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - http-nio-9090-exec-1 - INFO  - root    : Count of products against the order received]
+[2019/11/13 - http-nio-9090-exec-1 - INFO  - root    : OrderProductMap updated by qty]
+[2019/11/13 - http-nio-9090-exec-1 - INFO  - root    : Successfully updated OrderReturn table ]
+[2019/11/13 - http-nio-9090-exec-2 - INFO  - root    : All products loaded from database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]
+[2019/11/13 - main - INFO  - root    : OrderProductMap updated by qty]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - ERROR - root    : Unable to update order_product_map database]
+[2019/11/13 - main - ERROR - root    : Unable to update order_product_map database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap database updated]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : OrderProductMap retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Dispatch status retrieved from the database]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]
+[2019/11/13 - main - INFO  - root    : Count of products against the order received]

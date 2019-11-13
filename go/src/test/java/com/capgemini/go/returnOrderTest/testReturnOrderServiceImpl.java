@@ -1,26 +1,25 @@
-package com.capgemini.go.testproduct;
+package com.capgemini.go.returnOrderTest;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.ProductException;
-import com.capgemini.go.service.ProductService;
+import com.capgemini.go.exception.SalesRepresentativeException;
 import com.capgemini.go.service.SalesRepresentativeService;
 import com.capgemini.go.utility.InfoConstants;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestProductServiceImpl {
+public class testReturnOrderServiceImpl {
 
 	@Autowired
 	private SalesRepresentativeService salesRepresentativeService;
@@ -29,15 +28,13 @@ public class TestProductServiceImpl {
 	@Test
     @DisplayName("Return Order Accepted")
     @Rollback(true)
-	public void testReturnProductSuccess() {
+	public void testReturnOrderSuccess() {
 		String actualMessage = null;
-		String orderId="OR234";
-		String userId="SR02";
+		String orderId="OR789";
+		String userId="SR01";
 		String reason="incomplete";
-		String productID="prod02";
-		int qty=2;
 		try {
-            if(salesRepresentativeService.returnProduct(orderId, userId, productID, qty, reason)){
+            if(salesRepresentativeService.returnOrder(orderId, userId, reason)) {
             actualMessage = InfoConstants.Return_Accepted;
             }
         } catch (Exception exp) {
@@ -46,26 +43,22 @@ public class TestProductServiceImpl {
 		String expectedMessage = InfoConstants.Return_Accepted; 
 		assertEquals(expectedMessage, actualMessage);
 }
-    
 	@Test
-    @DisplayName("Return Product request failed")
+    @DisplayName("Return Order request failed")
     @Rollback(true)
-	public void testReturnProductFailure() {
+	public void testReturnOrderFailure() {
 		String actualMessage = null;
-		String orderId="OR234";
-		String userId="SR02";
+		String orderId="OR789";
+		String userId="SR01";
 		String reason="incomplete";
-		String productID="prod02";
-		int qty=2;
 		try {
-			if(salesRepresentativeService.returnProduct(orderId, userId, productID, qty, reason)) {
+            if(salesRepresentativeService.returnOrder(orderId, userId, reason)) {
             actualMessage = InfoConstants.Return_Accepted;
             }
         } catch (Exception exp) {
             actualMessage = exp.getMessage();
         }
-		String expectedMessage = ExceptionConstants.RETURN_PRODUCT_ERROR; 
+		String expectedMessage = ExceptionConstants.RETURN_ORDER_ERROR; 
 		assertEquals(expectedMessage, actualMessage);
 }
-   
 }

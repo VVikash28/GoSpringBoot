@@ -1,13 +1,15 @@
 package com.capgemini.go.service;
 
+import java.net.ConnectException;
+
 import com.capgemini.go.exception.SalesRepresentativeException;
 
 public interface SalesRepresentativeService {
 
-	boolean returnOrder(String orderId, String userId, String reason) throws SalesRepresentativeException;
+	boolean returnOrder(String orderId, String userId, String reason) throws SalesRepresentativeException, ConnectException;
 
 	boolean returnProduct(String orderId, String userId, String productID, int qty, String reason)
-			throws SalesRepresentativeException;
+			throws SalesRepresentativeException, ConnectException;
 
 	String cancelOrder(String orderId, String userId) throws Exception;
 

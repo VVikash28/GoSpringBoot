@@ -25,4 +25,18 @@ public class InfoConstants {
 	public static final String Address_Delete_Success = "Address Deleted Successfully";
 	// End of Address Info
 
+	
+	//ReturnOrder and Return Product
+	public static final String Return_Accepted="Return Order Accepted";
+	public static final String UpdatedOrderProductMap="OrderProductMap database updated";
+	public static final String OrderProductMapRetrieved="OrderProductMap retrieved from the database";
+	public static final String DispatchStatusRetrieved="Dispatch status retrieved from the database";
+	public static final String CountProduct="Count of products against the order received";
+	public static final String OrderProductMapUpdatedByQty="OrderProductMap updated by qty";
+	public static final String OrderReturnUpdated="Successfully updated OrderReturn table ";
+
+
+
+
+	
 }
