@@ -59,7 +59,7 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getMonthlyShelfTimeReport(retailerId, dateSelection);
 				} catch (RetailerInventoryException error) {
 					logger.error("getShelfTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
@@ -69,7 +69,7 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getQuarterlyShelfTimeReport(retailerId, dateSelection);
 				} catch (RetailerInventoryException error) {
 					logger.error("getShelfTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
@@ -79,20 +79,20 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getYearlyShelfTimeReport(retailerId, dateSelection);
 				} catch (RetailerInventoryException error) {
 					logger.error("getShelfTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
 			}
 			default: {
 				logger.error("getShelfTimeReport - " + "Invalid Argument Received");
-				((ObjectNode) dataResponse).put("Error :", "Invalid Argument Received");
+				((ObjectNode) dataResponse).put("Error", "Invalid Argument Received");
 				return dataResponse.toString();
 			}
 		}
 		if (result == null) {
 			logger.error("getShelfTimeReport - " + "Data could not be obtained from database");
-			((ObjectNode) dataResponse).put("Error :", "Data could not be obtained from database");
+			((ObjectNode) dataResponse).put("Error", "Data could not be obtained from database");
 			return dataResponse.toString();
 		}
 		JsonArray itemList = new JsonArray();
@@ -125,7 +125,7 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getItemWiseDeliveryTimeReport(retailerId);
 				} catch (RetailerInventoryException error) {
 					logger.error("getDeliveryTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
@@ -135,7 +135,7 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getCategoryWiseDeliveryTimeReport(retailerId);
 				} catch (RetailerInventoryException error) {
 					logger.error("getDeliveryTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
@@ -145,20 +145,20 @@ public class RetailerInventoryController {
 					result = this.retailerInventoryService.getOutlierCategoryItemWiseDeliveryTimeReport(retailerId);
 				} catch (RetailerInventoryException error) {
 					logger.error("getDeliveryTimeReport - " + error.getMessage());
-					((ObjectNode) dataResponse).put("Error :", error.getMessage());
+					((ObjectNode) dataResponse).put("Error", error.getMessage());
 					return dataResponse.toString();
 				}
 				break;
 			}
 			default: {
 				logger.error("getDeliveryTimeReport - " + "Invalid Argument Received");
-				((ObjectNode) dataResponse).put("Error :", "Invalid Argument Received");
+				((ObjectNode) dataResponse).put("Error", "Invalid Argument Received");
 				return dataResponse.toString();
 			}
 		}
 		if (result == null) {
 			logger.error("getDeliveryTimeReport - " + "Data could not be obtained from database");
-			((ObjectNode) dataResponse).put("Error :", "Data could not be obtained from database");
+			((ObjectNode) dataResponse).put("Error", "Data could not be obtained from database");
 			return dataResponse.toString();
 		}
 		JsonArray itemList = new JsonArray();
@@ -193,7 +193,7 @@ public class RetailerInventoryController {
 			}
 		} catch (Exception error) {
 			logger.error("getRetailerList - " + error.getMessage());
-			((ObjectNode) dataResponse).put("Error :", error.getMessage());
+			((ObjectNode) dataResponse).put("Error", error.getMessage());
 			return dataResponse.toString();
 		}
 		logger.info("getRetailerList - " + "Sent requested data");
@@ -221,7 +221,7 @@ public class RetailerInventoryController {
 			}
 		} catch (Exception error) {
 			logger.error("getRetailerInventoryById - " + error.getMessage());
-			((ObjectNode) dataResponse).put("Error :", error.getMessage());
+			((ObjectNode) dataResponse).put("Error", error.getMessage());
 			return dataResponse.toString();
 		}
 		logger.info("getRetailerInventoryById - " + "Sent requested data");
@@ -239,10 +239,10 @@ public class RetailerInventoryController {
 			this.retailerInventoryService.updateItemReceiveTimestamp(retailerId, productUin);
 		} catch (RetailerInventoryException error) {
 			logger.info("updateReceiveTime - " + error.getMessage());
-			((ObjectNode) dataResponse).put("Error :", error.getMessage());
+			((ObjectNode) dataResponse).put("Error", error.getMessage());
 			return dataResponse.toString();
 		}
-		((ObjectNode) dataResponse).put("Message :", "Item Receive Time Stamp updated successfully!");
+		((ObjectNode) dataResponse).put("Message", "Item Receive Time Stamp updated successfully!");
 		return dataResponse.toString();
 	}
 	
@@ -257,10 +257,10 @@ public class RetailerInventoryController {
 			this.retailerInventoryService.updateItemSaleTimestamp(retailerId, productUin);
 		} catch (RetailerInventoryException error) {
 			logger.info("updateSaleTime - " + error.getMessage());
-			((ObjectNode) dataResponse).put("Error :", error.getMessage());
+			((ObjectNode) dataResponse).put("Error", error.getMessage());
 			return dataResponse.toString();
 		}
-		((ObjectNode) dataResponse).put("Message :", "Item Sale Time Stamp updated successfully!");
+		((ObjectNode) dataResponse).put("Message", "Item Sale Time Stamp updated successfully!");
 		return dataResponse.toString();
 	}
 }
