@@ -6,7 +6,7 @@ import com.capgemini.go.exception.GoAdminException;
 import com.capgemini.go.service.GoAdminReportServiceImpl;
 import com.capgemini.go.service.GoAdminReportsService;
 
-public class apptest {
+public class Apptest {
 	
 	public static void main(String[] args) throws ConnectException, GoAdminException {
 		GoAdminReportsService go=new GoAdminReportServiceImpl();
