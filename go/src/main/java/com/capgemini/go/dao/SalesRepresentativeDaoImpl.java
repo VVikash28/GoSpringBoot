@@ -511,16 +511,12 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			oce.setUserId(orderCancel.getUserId());
 			oce.setProductid(orderCancel.getProductid());
 			oce.setProductuin(orderCancel.getProductuin());
-			// java.util.Date utilDate = orderCancel.getOrdercanceltime();
-			// java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 			oce.setOrdercanceltime(orderCancel.getOrdercanceltime());
 			oce.setOrdercancelstatus(1);
 			session.save(oce);
 			session.getTransaction().commit();
 			session2 = getSessionFactory().openSession();
 			session2.beginTransaction();
-			// Query query =
-			// session2.createQuery(HQLQuerryMapper.UPDATE_ORDER_PRODUCT_MAP_WITH_PRODUCT_UIN);
 			Query query = session2.createQuery(
 					"update OrderProductMapDTO opm set opm.productStatus = 0 where opm.orderId =:orderID and opm.productUIN =:productUin");
 			query.setParameter("orderID", orderCancel.getOrderid());
