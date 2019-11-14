@@ -22,7 +22,9 @@ import com.capgemini.go.dto.OrderDTO;
 import com.capgemini.go.dto.OrderProductMapDTO;
 import com.capgemini.go.dto.OrderReturnDTO;
 import com.capgemini.go.dto.SalesRepDTO;
+import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.SalesRepresentativeException;
+import com.capgemini.go.utility.InfoConstants;
 
 
 @Repository(value = "salesRepresentativeDao")
@@ -64,7 +66,6 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 
 		Session session = null;
 		try {
-			// exceptionProps = PropertiesLoader.loadProperties(EXCEPTION_PROPERTIES_FILE);
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
 			OrderReturnDTO orderReturn = new OrderReturnDTO();
@@ -77,11 +78,11 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			session.save(orderReturn);
 			session.getTransaction().commit();
 			returnOrderStatus = true;
+			logger.info(InfoConstants.Return_Accepted);
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-			session.close();
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.UNABLE_TO_UPDATE_RETURN_ORDER);
+			throw new SalesRepresentativeException(ExceptionConstants.UNABLE_TO_UPDATE_RETURN_ORDER + exp.getMessage());
 		} finally {
 			session.close();
 		}
@@ -99,23 +100,23 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 
 	public boolean updateOrderProductMap(String orderId) throws SalesRepresentativeException, ConnectException {
 		boolean orderProductMapFlag = false;
+		int productStatus=1;
 		Session session = null;
 		try {
-			// exceptionProps = PropertiesLoader.loadProperties(EXCEPTION_PROPERTIES_FILE);
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
 			OrderProductMapDTO opm = new OrderProductMapDTO();
 			Query query = session.createQuery(HQLQuerryMapper.UPDATE_ORDER_PRODUCT_MAP);
 			query.setParameter("orderId", orderId);
+			query.setParameter("productStatus", productStatus);
 			int result = query.executeUpdate();
 			orderProductMapFlag = true;
-
+			logger.info(InfoConstants.UpdatedOrderProductMap);
 			session.getTransaction().commit();
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.ORDER_PRODUCT_MAP_UPDATE_FAILURE);
+			throw new SalesRepresentativeException(ExceptionConstants.ORDER_PRODUCT_MAP_UPDATE_FAILURE + exp.getMessage());
 		} finally {
 			session.close();
 		}
@@ -147,12 +148,11 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 						opmEntity.get(i).getProductId(), opmEntity.get(i).getProductUIN(),
 						opmEntity.get(i).getProductStatus(), opmEntity.get(i).getGiftStatus()));
 			}
-			System.out.println(orderProductMap.size());
+			logger.info(InfoConstants.OrderProductMapRetrieved);
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.ORDER_PRODUCT_MAP_FAILURE);
+			throw new SalesRepresentativeException(ExceptionConstants.ORDER_PRODUCT_MAP_FAILURE + exp.getMessage());
 		} finally {
 			session.close();
 		}
@@ -178,11 +178,12 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			Query query = session.createNativeQuery(HQLQuerryMapper.CHECK_ORDER_DISPATCH_STATUS_RETURN);
 			query.setParameter("orderID", orderId);
 			order = (List<Integer>) query.list();
+			logger.info(InfoConstants.DispatchStatusRetrieved);
 
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.DISPATCH_STATUS_ERROR);
+			throw new SalesRepresentativeException(ExceptionConstants.DISPATCH_STATUS_ERROR + exp.getMessage());
 		} finally {
 			session.close();
 
@@ -219,11 +220,13 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				count = (long) employees.get(0);
 			}
 			session.getTransaction().commit();
+			logger.info(InfoConstants.CountProduct);
+
 
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.COUNT_PRODUCT_FAILURE);
+			throw new SalesRepresentativeException(ExceptionConstants.COUNT_PRODUCT_FAILURE + exp.getMessage());
 		} finally {
 			session.close();
 
@@ -256,11 +259,11 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 			int result = query.executeUpdate();
 			updateStatus = result > 0 ? true : false;
 			session.getTransaction().commit();
-
+			logger.info(InfoConstants.OrderProductMapUpdatedByQty);
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
 			session.getTransaction().rollback();
-			throw new SalesRepresentativeException("order_product_map_failure");
+			logger.error(ExceptionConstants.COUNT_PRODUCT_FAILURE);
+			throw new SalesRepresentativeException(ExceptionConstants.COUNT_PRODUCT_FAILURE + exp.getMessage());
 		} finally {
 			session.close();
 
@@ -311,11 +314,13 @@ public class SalesRepresentativeDaoImpl implements SalesRepresentativeDao {
 				session2.getTransaction().commit();
 				orderReturnStatus = true;
 			}
+			logger.info(InfoConstants.OrderReturnUpdated);
+
 
 		} catch (HibernateException exp) {
-			logger.error(exp.getMessage());
-			session2.getTransaction().rollback();
-			throw new SalesRepresentativeException("order_product_map_failure");
+			session.getTransaction().rollback();
+			logger.error(ExceptionConstants.COUNT_PRODUCT_FAILURE);
+			throw new SalesRepresentativeException(ExceptionConstants.COUNT_PRODUCT_FAILURE + exp.getMessage());
 		} finally {
 			session.close();
 			session2.close();

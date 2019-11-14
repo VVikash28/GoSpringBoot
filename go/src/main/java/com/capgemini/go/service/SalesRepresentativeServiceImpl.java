@@ -1,6 +1,7 @@
 package com.capgemini.go.service;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.capgemini.go.dto.OrderCancelDTO;
 import com.capgemini.go.dto.OrderDTO;
 import com.capgemini.go.dto.OrderProductMapDTO;
 import com.capgemini.go.dto.OrderReturnDTO;
+import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.OrderNotFoundException;
 import com.capgemini.go.exception.ProductNotFoundException;
 import com.capgemini.go.exception.SalesRepresentativeException;
@@ -42,12 +44,12 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 	 * Author : CAPGEMINI - Creation Date : 23/09/2019 - Description : Return order
 	 * calls the dao calls checkDispatchStatus ,getOrderProductMap,and returnOrder
 	 * along with updateProductMap
+	 * @throws ConnectException 
 	 ********************************************************************************************************/
-	public boolean returnOrder(String orderId, String userId, String reason) throws SalesRepresentativeException {
+	public boolean returnOrder(String orderId, String userId, String reason) throws SalesRepresentativeException, ConnectException {
 
 		boolean statusOrderReturn = false;
 		boolean orderProductMapStatus = false;
-		try {
 			if (salesRepresentativeDao.checkDispatchStatus(orderId)) {
 				List<OrderProductMapDTO> opm = salesRepresentativeDao.getOrderProductMap(orderId);
 				Date dt = new Date();
@@ -60,15 +62,10 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 					orderProductMapStatus = salesRepresentativeDao.updateOrderProductMap(orderId);
 					orderProductMapStatus = true;
 				}
-			} else {
-				throw new SalesRepresentativeException("not_yet_dispatched");
 			}
-		} catch (SalesRepresentativeException | IOException e) {
-			logger.error(e.getMessage());
-			throw new SalesRepresentativeException("failure_order");
-
-		}
-
+			if(!orderProductMapStatus) {
+				throw new SalesRepresentativeException(ExceptionConstants.RETURN_ORDER_ERROR);
+			}
 		return orderProductMapStatus;
 	}
 
@@ -77,26 +74,26 @@ public class SalesRepresentativeServiceImpl implements SalesRepresentativeServic
 	 * productId,int qty,String reason - Return Type :boolean- Throws
 	 * :SalesRepresentativeException - Author : CAPGEMINI - Creation Date :
 	 * 23/09/2019 - Description : checking whether the order is at all despatched
+	 * @throws ConnectException 
 	 ********************************************************************************************************/
 	public boolean returnProduct(String orderId, String userId, String productId, int qty, String reason)
-			throws SalesRepresentativeException {
+			throws SalesRepresentativeException, ConnectException {
 		boolean returnProductStatus = false;
 		try {
-			if (salesRepresentativeDao.checkDispatchStatus(orderId)) {
+		if (salesRepresentativeDao.checkDispatchStatus(orderId)) {
 				int countProd = salesRepresentativeDao.getCountProduct(orderId, productId);
 				if (countProd >= qty) {
 					salesRepresentativeDao.updateOrderProductMapByQty(orderId, productId, qty);
+					
 					salesRepresentativeDao.updateOrderReturn(orderId, productId, userId, reason, qty);
 					returnProductStatus = true;
-				} else {
-				}
-			} else {
-				// GoLog.logger.error(exceptionProps.getProperty("not_yet_dispatched"));
-				throw new SalesRepresentativeException("not_yet_dispatched");
+				} 
 			}
-		} catch (SalesRepresentativeException | IOException e) {
-			throw new SalesRepresentativeException("failure_order");
 		}
+		catch(Exception exp) {
+			throw new  SalesRepresentativeException(ExceptionConstants.RETURN_PRODUCT_ERROR);
+		}
+		
 
 		return returnProductStatus;
 	}

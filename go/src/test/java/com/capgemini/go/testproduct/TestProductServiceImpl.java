@@ -1,6 +1,10 @@
 package com.capgemini.go.testproduct;
 
+ 
+
 import static org.junit.Assert.assertEquals;
+
+ 
 
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+ 
+
 import org.apache.log4j.Logger;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,45 +22,59 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+ 
+
 import com.capgemini.go.dto.ProductDTO;
 import com.capgemini.go.exception.ExceptionConstants;
 import com.capgemini.go.exception.ProductException;
 import com.capgemini.go.service.ProductService;
 import com.capgemini.go.utility.InfoConstants;
 
+ 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestProductServiceImpl {
 
-	@Autowired
+ 
+
+    @Autowired
     private ProductService productService;
 
-	private static Logger logger;
-	
-	@BeforeAll
-	static void setUpBeforeClass()
-	{
-		  logger = Logger.getRootLogger();
-	}
+ 
 
-	@BeforeEach
-	void setUp() throws Exception {
-		logger.info("Test Case Started");
-		
-	}
+    private static Logger logger;
+    
+    @BeforeAll
+    static void setUpBeforeClass()
+    {
+          logger = Logger.getRootLogger();
+    }
 
-	
-	@AfterEach
-	void tearDown() throws Exception {
-		logger.info("Test Case Over");
-	}
+ 
+
+    @BeforeEach
+    void setUp() throws Exception {
+        logger.info("Test Case Started");
+        
+    }
+
+ 
+
+    
+    @AfterEach
+    void tearDown() throws Exception {
+        logger.info("Test Case Over");
+    }
+
+ 
 
     @Test
     @DisplayName("Product Added Succesfully")
     @Rollback(true)
     public void testAddProductSuccess()
     {
-    	ProductDTO newProduct = new ProductDTO("prodxxx", 9999, "#ffffff", "X", "@@@@", "xxxMan", 1,1, "sample product");
+        ProductDTO newProduct = new ProductDTO("prodxxx", 9999, "#ffffff", "X", "@@@@", "xxxMan", 1,1, "sample product");
         String actualMessage = null;
         try {
             if(productService.addProduct(newProduct)) {
@@ -72,7 +92,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product Addition Failure")
     @Rollback(true)
     public void testAddProductFailure() {
-    	ProductDTO newProduct = new ProductDTO("prod99", 9999, "#ffffff", "X", "@@@@", "xxxMan", 1,1, "sample product");
+        ProductDTO newProduct = new ProductDTO("prod99", 9999, "#ffffff", "X", "@@@@", "xxxMan", 1,1, "sample product");
         String actualMessage = null;
         try {
             if(productService.addProduct(newProduct)) {
@@ -90,7 +110,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product Addition Null")
     @Rollback(true)
     public void testAddProductNull() {
-    	ProductDTO newProduct = null;
+        ProductDTO newProduct = null;
         
         assertThrows(ProductException.class,()-> productService.addProduct(newProduct));
     }
@@ -99,7 +119,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product updated successfully")
     @Rollback(true)
     public void testeditProductSuccess() {
-    	ProductDTO newProduct = new ProductDTO("prodxxx", 9999, "#ffffff", "X", "#####", "xxxMan", 1,1, "sample product X");
+        ProductDTO newProduct = new ProductDTO("prodxxx", 9999, "#ffffff", "X", "#####", "xxxMan", 1,1, "sample product X");
         String actualMessage = null;
         try {
             if(productService.editProduct(newProduct)) {
@@ -116,7 +136,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product updated Failure")
     @Rollback(true)
     public void testeditProductFailure() {
-    	ProductDTO newProduct = new ProductDTO("xxyy", 9999, "#ffffff", "X", "#####", "xxxMan", 1,1, "sample product X");
+        ProductDTO newProduct = new ProductDTO("xxyy", 9999, "#ffffff", "X", "#####", "xxxMan", 1,1, "sample product X");
         String actualMessage = null;
         try {
             if(productService.editProduct(newProduct)) {
@@ -133,7 +153,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product Addition Null")
     @Rollback(true)
     public void testeditProductNull() {
-    	ProductDTO newProduct = null;
+        ProductDTO newProduct = null;
         
         assertThrows(ProductException.class,()-> productService.editProduct(newProduct));
     }
@@ -142,7 +162,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product deleted successfully")
     @Rollback(true)
     public void testdeleteProductSuccess() {
-    	
+        
         String actualMessage = null;
         try {
             if(productService.deleteProduct("prodxxx")) {
@@ -159,7 +179,7 @@ public class TestProductServiceImpl {
     @DisplayName("Product deleted Failure")
     @Rollback(true)
     public void testdeletedProductFailure() {
-    	
+        
         String actualMessage = null;
         try {
             if(productService.deleteProduct("xxyy")) {
@@ -180,3 +200,4 @@ public class TestProductServiceImpl {
         assertThrows(ProductException.class,()-> productService.deleteProduct(null));
     }
 }
+ 

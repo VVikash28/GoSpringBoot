@@ -11,7 +11,7 @@ public class HQLQuerryMapper {
 
 	public static final String VALIDATE_NUMBER_EMAIL = "SELECT COUNT(*) FROM UserEntity WHERE userNumber =:existNum OR userMail =:existMail";
 
-	public static final String UPDATE_ORDER_PRODUCT_MAP = "UPDATE OrderProductMapDTO opm SET opm.productStatus=0 WHERE ORDER_ID=:orderId ";
+	public static final String UPDATE_ORDER_PRODUCT_MAP = "UPDATE OrderProductMapDTO opm SET opm.productStatus=0 WHERE ORDER_ID=:orderId and opm.productStatus=:productStatus";
 
 	// GOADMIN REPORTS HQL QUERRY
 

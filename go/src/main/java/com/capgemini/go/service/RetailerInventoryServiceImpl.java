@@ -1,8 +1,11 @@
 package com.capgemini.go.service;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
@@ -191,11 +194,72 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getCategoryWiseDeliveryTimeReport(String retailerId)
 			throws RetailerInventoryException {
-		return null;
+		logger.info("getCategoryWiseDeliveryTimeReport - " + "Request for Category Wise delivery time report received");
+		List<RetailerInventoryBean> result = new ArrayList<RetailerInventoryBean> ();
+		
+		RetailerInventoryDTO queryArguments = new RetailerInventoryDTO (retailerId, (byte)0, null, null, null, null, null);
+		List<RetailerInventoryDTO> listOfDeliveredItems = this.retailerInventoryDao.getDeliveredItemsDetails(queryArguments);
+		
+		Map<Integer, List<RetailerInventoryBean>> map = new HashMap<Integer, List<RetailerInventoryBean>>();
+		for (int category = 1; category <= 5; category++)
+			map.put(category, new ArrayList<RetailerInventoryBean>());
+		
+		try {
+			List<UserDTO> userList = this.userDao.getUserIdList();
+			for (RetailerInventoryDTO deliveredItem : listOfDeliveredItems) {
+				RetailerInventoryBean object = new RetailerInventoryBean ();
+				object.setRetailerId(retailerId);
+				for (UserDTO user : userList) {
+					if (user.getUserId().equals(retailerId)) {
+						object.setRetailerName(user.getUserName());
+						break;
+					}
+				}
+				object.setProductCategoryNumber(deliveredItem.getProductCategory());
+				object.setProductCategoryName(GoUtility.getCategoryName(deliveredItem.getProductCategory()));
+				object.setProductUniqueId(deliveredItem.getProductUniqueId());
+				object.setDeliveryTimePeriod(GoUtility.calculatePeriod(deliveredItem.getProductDispatchTimestamp(), deliveredItem.getProductReceiveTimestamp()));
+				object.setShelfTimePeriod(null);
+				map.get(Integer.valueOf(object.getProductCategoryNumber())).add(object);
+			}
+			
+			for (int category = 1; category <= 5; category++) {
+				if (map.get(category).size() != 0) {
+					int years = 0, months = 0, days = 0, count = 0;
+					for (RetailerInventoryBean item : map.get(category)) {
+						years += item.getDeliveryTimePeriod().getYears(); 
+						months += item.getDeliveryTimePeriod().getMonths(); 
+						days += item.getDeliveryTimePeriod().getDays();
+						count ++;
+					}
+					years /= count;
+					months /= count;
+					days /= count;
+					RetailerInventoryBean object = new RetailerInventoryBean ();
+					object.setProductCategoryNumber((byte)category);
+					object.setProductCategoryName(GoUtility.getCategoryName(category));
+					object.setProductUniqueId("----");
+					object.setDeliveryTimePeriod(Period.of(years, months, days));
+					result.add(object);
+				}
+			}
+			
+		} catch (UserException error) {
+			logger.error("getCategoryWiseDeliveryTimeReport - " + error.getMessage());
+			error.printStackTrace();
+			throw new RetailerInventoryException ("getCategoryWiseDeliveryTimeReport - " + ExceptionConstants.FAILED_TO_RETRIEVE_USERNAME);
+		} catch (RuntimeException error) {
+			logger.error("getCategoryWiseDeliveryTimeReport - " + error.getMessage());
+			error.printStackTrace();
+			throw new RetailerInventoryException ("getCategoryWiseDeliveryTimeReport - " + ExceptionConstants.INTERNAL_RUNTIME_ERROR);
+		}
+		logger.info("getCategoryWiseDeliveryTimeReport - " + "Sent requested data");
+		return result;
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : getOutlierCategoryItemWiseDeliveryTimeReport <br>
+	 * - Function Name : get
+	 * OutlierCategoryItemWiseDeliveryTimeReport <br>
 	 * - Description : to get Outlier Category Item wise Delivery Time Report <br>
 	 * 
 	 * @param String retailerId
@@ -204,6 +268,13 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 	 *******************************************************************************************************/
 	public List<RetailerInventoryBean> getOutlierCategoryItemWiseDeliveryTimeReport(String retailerId)
 			throws RetailerInventoryException {
+		List<RetailerInventoryBean> categoryWiseDeliveryTime = getCategoryWiseDeliveryTimeReport(retailerId);
+		int maxCatNumber = 0, minCatNumber = 0;
+		for (int category = 0; category < 4; category ++) {
+			if (GoUtility.comparePeriod(categoryWiseDeliveryTime.get(category).getDeliveryTimePeriod(), categoryWiseDeliveryTime.get(category+1).getDeliveryTimePeriod())) {
+				
+			}
+		}
 		return null;
 	}
 	// end of Shelf Time Report and Delivery Time Report
@@ -343,9 +414,11 @@ public class RetailerInventoryServiceImpl implements RetailerInventoryService {
 				itemBean.setProductCategoryNumber(item.getProductCategory());
 				itemBean.setProductCategoryName(GoUtility.getCategoryName(item.getProductCategory()));
 				for (ProductDTO product : productList) {
-					if (item.getProductId() == product.getProductId()) {
+					if (product.getProductId().equals(item.getProductId())) {
 						itemBean.setProductName(product.getProductName());
 						break;
+					} else {
+						continue;
 					}
 				}
 				itemBean.setProductUniqueId(item.getProductUniqueId());

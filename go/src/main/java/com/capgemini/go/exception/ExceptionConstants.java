@@ -58,4 +58,15 @@ public class ExceptionConstants {
 	public static final String ADDRESS_DELETE_ERROR = "Error in deleting address >>>";
 	// END OF ADDRESS EXCEPTION CONSTANTS
 
+	//Return Order Constants
+	public static final String ORDER_PRODUCT_MAP_UPDATE_FAILURE="Unable to update order_product_map database";
+	public static final String UNABLE_TO_UPDATE_RETURN_ORDER="unable to update return order database";
+	public static final String ORDER_PRODUCT_MAP_FAILURE="No matching product for this order";
+	public static final String DISPATCH_STATUS_ERROR="No matching order found";
+	public static final String COUNT_PRODUCT_FAILURE="No product against the order";
+	public static final String ORDER_PRODUCT_MAP_UPDATE_QTY_ERROR="Unble to update Order_Product_Map dtaabase by qty ";
+	public static final String ORDER_RETURN_UPDATE_ERROR="Unble to update Order_Return table in the database ";
+	public static final String RETURN_ORDER_ERROR="Return Order request failed";
+	public static final String RETURN_PRODUCT_ERROR="Return Product request failed";
+
 }
