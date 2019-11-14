@@ -51,13 +51,13 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 	public List<ViewSalesReportByUserDTO> viewSalesReportByUserAndCategory(Date entry, Date exit, String TargetuserId,
 			int category) throws GoAdminException, ConnectException {
-
+		//creating a list of ViewSalesReportByUserDTO type
 		List<ViewSalesReportByUserDTO> viewSales = new ArrayList<ViewSalesReportByUserDTO>();
 		Session session = null;
 
 		try {
 			ViewSalesReportByUserDTO temp;
-			ViewSalesReportByUserDTO temp1;
+		
 
 			if (entry == null || exit == null) {
 				logger.error(ExceptionConstants.INVALID_DATE);
@@ -66,20 +66,23 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 			session = getSessionFactory().openSession();
 			session.beginTransaction();
-
+			//results object array
 			List<Object[]> results = session.createQuery(HQLQuerryMapper.SELECT_DATA_FROM_DATABASE).getResultList();
 			String userId, date, orderId, productId;
 			int productCategory;
 			Double productPrice;
 
 			for (Object[] data : results) {
-
+				
+				//storing the data from database to a temporary variable
 				userId = data[0].toString();
 				date = data[1].toString();
 				orderId = data[2].toString();
 				productId = data[3].toString();
 				productCategory = Integer.parseInt(data[4].toString());
 				productPrice = Double.parseDouble(data[5].toString());
+				
+				//First condition i.e a particular UserId and Product category
 				if (TargetuserId.equalsIgnoreCase(userId) && category == productCategory) {
 
 					temp = new ViewSalesReportByUserDTO();
@@ -90,7 +93,9 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 					temp.setProductPrice(productPrice);
 					temp.setProductCategory(productCategory);
 					viewSales.add(temp);
-				} else if (TargetuserId.equalsIgnoreCase("ALL") && category == productCategory) {
+				} 
+				//Second condition i.e a All UserId and Product category
+				else if (TargetuserId.equalsIgnoreCase("ALL") && category == productCategory) {
 					temp = new ViewSalesReportByUserDTO();
 					temp.setUserId(userId);
 					temp.setDate(date);
@@ -99,7 +104,9 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 					temp.setProductPrice(productPrice);
 					temp.setProductCategory(productCategory);
 					viewSales.add(temp);
-				} else if (TargetuserId.equalsIgnoreCase("ALL") && category == 6) {
+				} 
+				//Third condition i.e All UserId and All Product category
+				else if (TargetuserId.equalsIgnoreCase("ALL") && category == 6) {
 					temp = new ViewSalesReportByUserDTO();
 					temp.setUserId(userId);
 					temp.setDate(date);
@@ -210,15 +217,14 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 						}
 
 					}
-					// }
+					
 				}
-				/// }
-
+				
 				// loop for going from January to December
 				for (j = 0; j <= 11; j++) {
 
 					temp = new ViewDetailedSalesReportByProductDTO();
-					// initialising the amount change of current month and previous month
+					// Initializing the amount change of current month and previous month
 
 					if (j == 0) {
 
@@ -250,7 +256,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 
 				}
 
-				// Initialising previous month as last month of current year
+				// Initializing previous month as last month of current year
 				prevM = arrRevM[11];
 
 				int k = 0;
@@ -263,7 +269,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 				for (j = 0; j <= 3; j++) {
 
 					temp = new ViewDetailedSalesReportByProductDTO();
-					// initialising the amount change of current month and previous month
+					// Initializing the amount change of current month and previous month
 
 					if (j == 0) {
 
@@ -295,7 +301,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 					viewDetailedSalesReportByProduct.add(temp);
 
 				}
-				// initialising the amount change of previous quarter as last quarter
+				// Initializing the amount change of previous quarter as last quarter
 				prevQ = arrRevQ[3];
 
 				// year to year
@@ -342,6 +348,7 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 			// end of index year
 
 			int n = viewDetailedSalesReportByProduct.size(), index;
+			//Month to month
 			if (category == 1) {
 				for (index = 0; index < n; index++) {
 
@@ -349,13 +356,17 @@ public class GoAdminReportsDaoImpl implements GoAdminReportsDao {
 						growthListfinal.add(viewDetailedSalesReportByProduct.get(index));
 				}
 
-			} else if (category == 2) {
+			} 
+			//Quarter to Quarter
+			else if (category == 2) {
 				for (index = 0; index < n; index++) {
 					if (viewDetailedSalesReportByProduct.get(index).getType().equalsIgnoreCase("QUARTER"))
 						growthListfinal.add(viewDetailedSalesReportByProduct.get(index));
 				}
 
-			} else if (category == 3) {
+			}
+			//Year to Year
+			else if (category == 3) {
 				for (index = 0; index < n; index++) {
 					if (viewDetailedSalesReportByProduct.get(index).getType().equalsIgnoreCase("YEAR"))
 						growthListfinal.add(viewDetailedSalesReportByProduct.get(index));
